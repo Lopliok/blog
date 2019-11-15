@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "env": {
+    "JWT_TOKEN": "secret"
+  },
+  "builds": [
+    {
+      "src": "dist/src/main.js",
+      "use": "@now/node-server"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/src/main.js"
+    }
+  ]
+}

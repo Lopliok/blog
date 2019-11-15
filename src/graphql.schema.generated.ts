@@ -44,6 +44,8 @@ export abstract class IQuery {
     abstract post(id: string): Post | Promise<Post>;
 
     abstract posts(): Post[] | Promise<Post[]>;
+
+    abstract myPosts(): Post[] | Promise<Post[]>;
 }
 
 export class User {

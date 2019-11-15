@@ -36,6 +36,7 @@ type AuthPayload {
 type Query {
   post(id: ID!): Post!
   posts: [Post!]!
+  myPosts: [Post!]!
 }
 
 type Mutation {
