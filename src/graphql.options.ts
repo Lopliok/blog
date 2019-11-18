@@ -1,6 +1,6 @@
-import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql';
-import { Injectable } from '@nestjs/common';
-import { join } from 'path';
+import { GqlModuleOptions, GqlOptionsFactory } from '@nestjs/graphql'
+import { Injectable } from '@nestjs/common'
+import { join } from 'path'
 
 @Injectable()
 export class GraphqlOptions implements GqlOptionsFactory {
@@ -12,7 +12,8 @@ export class GraphqlOptions implements GqlOptionsFactory {
       resolverValidationOptions: {
         requireResolversForResolveType: false,
       },
-      definitions: { // will generate .ts types from gql schema files
+      definitions: {
+        // will generate .ts types from gql schema files
         path: join(process.cwd(), 'src/graphql.schema.generated.ts'),
         outputAs: 'class',
       },
@@ -20,6 +21,6 @@ export class GraphqlOptions implements GqlOptionsFactory {
       introspection: true,
       playground: true,
       cors: false,
-    };
+    }
   }
 }
