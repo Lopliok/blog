@@ -2,6 +2,7 @@
   "version": 2,
   "name": "nestjs-now",
   "env": {
+    "JWT_SECRET": "secret",
     "JWT_TOKEN": "secret"
   },
   "builds": [
@@ -15,5 +16,11 @@
       "src": "/(.*)",
       "dest": "/dist/src/main.js"
     }
-  ]
+  ],
+  "build": {
+    "env": {
+      "JWT_SECRET": "secret",
+      "JWT_TOKEN": "secret"
+    }
+  }
 }

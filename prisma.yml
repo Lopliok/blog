@@ -1,4 +1,4 @@
-endpoint: http://localhost:4466
+endpoint: https://eu1.prisma.sh/lopliok-e316c6/myservice/dev
 datamodel:
   - database/datamodel.prisma
 generate:

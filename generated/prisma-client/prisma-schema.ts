@@ -2,12 +2,492 @@
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-export const typeDefs = /* GraphQL */ `type AggregatePost {
+export const typeDefs = /* GraphQL */ `type AggregateArticle {
+  count: Int!
+}
+
+type AggregateArticleSection {
+  count: Int!
+}
+
+type AggregateParagraph {
+  count: Int!
+}
+
+type AggregatePost {
   count: Int!
 }
 
 type AggregateUser {
   count: Int!
+}
+
+type Article {
+  id: ID!
+  title: String!
+  paragraphs(where: ParagraphWhereInput, orderBy: ParagraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Paragraph!]
+  img: String
+  active: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  section: ArticleSection
+}
+
+type ArticleConnection {
+  pageInfo: PageInfo!
+  edges: [ArticleEdge]!
+  aggregate: AggregateArticle!
+}
+
+input ArticleCreateInput {
+  id: ID
+  title: String!
+  paragraphs: ParagraphCreateManyWithoutArticleInput
+  img: String
+  active: Boolean
+  section: ArticleSectionCreateOneWithoutArticlesInput
+}
+
+input ArticleCreateManyWithoutSectionInput {
+  create: [ArticleCreateWithoutSectionInput!]
+  connect: [ArticleWhereUniqueInput!]
+}
+
+input ArticleCreateOneWithoutParagraphsInput {
+  create: ArticleCreateWithoutParagraphsInput
+  connect: ArticleWhereUniqueInput
+}
+
+input ArticleCreateWithoutParagraphsInput {
+  id: ID
+  title: String!
+  img: String
+  active: Boolean
+  section: ArticleSectionCreateOneWithoutArticlesInput
+}
+
+input ArticleCreateWithoutSectionInput {
+  id: ID
+  title: String!
+  paragraphs: ParagraphCreateManyWithoutArticleInput
+  img: String
+  active: Boolean
+}
+
+type ArticleEdge {
+  node: Article!
+  cursor: String!
+}
+
+enum ArticleOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  img_ASC
+  img_DESC
+  active_ASC
+  active_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ArticlePreviousValues {
+  id: ID!
+  title: String!
+  img: String
+  active: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ArticleScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
+  active: Boolean
+  active_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ArticleScalarWhereInput!]
+  OR: [ArticleScalarWhereInput!]
+  NOT: [ArticleScalarWhereInput!]
+}
+
+type ArticleSection {
+  id: ID!
+  title: String!
+  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ArticleSectionConnection {
+  pageInfo: PageInfo!
+  edges: [ArticleSectionEdge]!
+  aggregate: AggregateArticleSection!
+}
+
+input ArticleSectionCreateInput {
+  id: ID
+  title: String!
+  articles: ArticleCreateManyWithoutSectionInput
+}
+
+input ArticleSectionCreateOneWithoutArticlesInput {
+  create: ArticleSectionCreateWithoutArticlesInput
+  connect: ArticleSectionWhereUniqueInput
+}
+
+input ArticleSectionCreateWithoutArticlesInput {
+  id: ID
+  title: String!
+}
+
+type ArticleSectionEdge {
+  node: ArticleSection!
+  cursor: String!
+}
+
+enum ArticleSectionOrderByInput {
+  id_ASC
+  id_DESC
+  title_ASC
+  title_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ArticleSectionPreviousValues {
+  id: ID!
+  title: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ArticleSectionSubscriptionPayload {
+  mutation: MutationType!
+  node: ArticleSection
+  updatedFields: [String!]
+  previousValues: ArticleSectionPreviousValues
+}
+
+input ArticleSectionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ArticleSectionWhereInput
+  AND: [ArticleSectionSubscriptionWhereInput!]
+  OR: [ArticleSectionSubscriptionWhereInput!]
+  NOT: [ArticleSectionSubscriptionWhereInput!]
+}
+
+input ArticleSectionUpdateInput {
+  title: String
+  articles: ArticleUpdateManyWithoutSectionInput
+}
+
+input ArticleSectionUpdateManyMutationInput {
+  title: String
+}
+
+input ArticleSectionUpdateOneWithoutArticlesInput {
+  create: ArticleSectionCreateWithoutArticlesInput
+  update: ArticleSectionUpdateWithoutArticlesDataInput
+  upsert: ArticleSectionUpsertWithoutArticlesInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: ArticleSectionWhereUniqueInput
+}
+
+input ArticleSectionUpdateWithoutArticlesDataInput {
+  title: String
+}
+
+input ArticleSectionUpsertWithoutArticlesInput {
+  update: ArticleSectionUpdateWithoutArticlesDataInput!
+  create: ArticleSectionCreateWithoutArticlesInput!
+}
+
+input ArticleSectionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  articles_every: ArticleWhereInput
+  articles_some: ArticleWhereInput
+  articles_none: ArticleWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ArticleSectionWhereInput!]
+  OR: [ArticleSectionWhereInput!]
+  NOT: [ArticleSectionWhereInput!]
+}
+
+input ArticleSectionWhereUniqueInput {
+  id: ID
+}
+
+type ArticleSubscriptionPayload {
+  mutation: MutationType!
+  node: Article
+  updatedFields: [String!]
+  previousValues: ArticlePreviousValues
+}
+
+input ArticleSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ArticleWhereInput
+  AND: [ArticleSubscriptionWhereInput!]
+  OR: [ArticleSubscriptionWhereInput!]
+  NOT: [ArticleSubscriptionWhereInput!]
+}
+
+input ArticleUpdateInput {
+  title: String
+  paragraphs: ParagraphUpdateManyWithoutArticleInput
+  img: String
+  active: Boolean
+  section: ArticleSectionUpdateOneWithoutArticlesInput
+}
+
+input ArticleUpdateManyDataInput {
+  title: String
+  img: String
+  active: Boolean
+}
+
+input ArticleUpdateManyMutationInput {
+  title: String
+  img: String
+  active: Boolean
+}
+
+input ArticleUpdateManyWithoutSectionInput {
+  create: [ArticleCreateWithoutSectionInput!]
+  delete: [ArticleWhereUniqueInput!]
+  connect: [ArticleWhereUniqueInput!]
+  set: [ArticleWhereUniqueInput!]
+  disconnect: [ArticleWhereUniqueInput!]
+  update: [ArticleUpdateWithWhereUniqueWithoutSectionInput!]
+  upsert: [ArticleUpsertWithWhereUniqueWithoutSectionInput!]
+  deleteMany: [ArticleScalarWhereInput!]
+  updateMany: [ArticleUpdateManyWithWhereNestedInput!]
+}
+
+input ArticleUpdateManyWithWhereNestedInput {
+  where: ArticleScalarWhereInput!
+  data: ArticleUpdateManyDataInput!
+}
+
+input ArticleUpdateOneRequiredWithoutParagraphsInput {
+  create: ArticleCreateWithoutParagraphsInput
+  update: ArticleUpdateWithoutParagraphsDataInput
+  upsert: ArticleUpsertWithoutParagraphsInput
+  connect: ArticleWhereUniqueInput
+}
+
+input ArticleUpdateWithoutParagraphsDataInput {
+  title: String
+  img: String
+  active: Boolean
+  section: ArticleSectionUpdateOneWithoutArticlesInput
+}
+
+input ArticleUpdateWithoutSectionDataInput {
+  title: String
+  paragraphs: ParagraphUpdateManyWithoutArticleInput
+  img: String
+  active: Boolean
+}
+
+input ArticleUpdateWithWhereUniqueWithoutSectionInput {
+  where: ArticleWhereUniqueInput!
+  data: ArticleUpdateWithoutSectionDataInput!
+}
+
+input ArticleUpsertWithoutParagraphsInput {
+  update: ArticleUpdateWithoutParagraphsDataInput!
+  create: ArticleCreateWithoutParagraphsInput!
+}
+
+input ArticleUpsertWithWhereUniqueWithoutSectionInput {
+  where: ArticleWhereUniqueInput!
+  update: ArticleUpdateWithoutSectionDataInput!
+  create: ArticleCreateWithoutSectionInput!
+}
+
+input ArticleWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  title: String
+  title_not: String
+  title_in: [String!]
+  title_not_in: [String!]
+  title_lt: String
+  title_lte: String
+  title_gt: String
+  title_gte: String
+  title_contains: String
+  title_not_contains: String
+  title_starts_with: String
+  title_not_starts_with: String
+  title_ends_with: String
+  title_not_ends_with: String
+  paragraphs_every: ParagraphWhereInput
+  paragraphs_some: ParagraphWhereInput
+  paragraphs_none: ParagraphWhereInput
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
+  active: Boolean
+  active_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  section: ArticleSectionWhereInput
+  AND: [ArticleWhereInput!]
+  OR: [ArticleWhereInput!]
+  NOT: [ArticleWhereInput!]
+}
+
+input ArticleWhereUniqueInput {
+  id: ID
 }
 
 type BatchPayload {
@@ -19,6 +499,24 @@ scalar DateTime
 scalar Long
 
 type Mutation {
+  createArticle(data: ArticleCreateInput!): Article!
+  updateArticle(data: ArticleUpdateInput!, where: ArticleWhereUniqueInput!): Article
+  updateManyArticles(data: ArticleUpdateManyMutationInput!, where: ArticleWhereInput): BatchPayload!
+  upsertArticle(where: ArticleWhereUniqueInput!, create: ArticleCreateInput!, update: ArticleUpdateInput!): Article!
+  deleteArticle(where: ArticleWhereUniqueInput!): Article
+  deleteManyArticles(where: ArticleWhereInput): BatchPayload!
+  createArticleSection(data: ArticleSectionCreateInput!): ArticleSection!
+  updateArticleSection(data: ArticleSectionUpdateInput!, where: ArticleSectionWhereUniqueInput!): ArticleSection
+  updateManyArticleSections(data: ArticleSectionUpdateManyMutationInput!, where: ArticleSectionWhereInput): BatchPayload!
+  upsertArticleSection(where: ArticleSectionWhereUniqueInput!, create: ArticleSectionCreateInput!, update: ArticleSectionUpdateInput!): ArticleSection!
+  deleteArticleSection(where: ArticleSectionWhereUniqueInput!): ArticleSection
+  deleteManyArticleSections(where: ArticleSectionWhereInput): BatchPayload!
+  createParagraph(data: ParagraphCreateInput!): Paragraph!
+  updateParagraph(data: ParagraphUpdateInput!, where: ParagraphWhereUniqueInput!): Paragraph
+  updateManyParagraphs(data: ParagraphUpdateManyMutationInput!, where: ParagraphWhereInput): BatchPayload!
+  upsertParagraph(where: ParagraphWhereUniqueInput!, create: ParagraphCreateInput!, update: ParagraphUpdateInput!): Paragraph!
+  deleteParagraph(where: ParagraphWhereUniqueInput!): Paragraph
+  deleteManyParagraphs(where: ParagraphWhereInput): BatchPayload!
   createPost(data: PostCreateInput!): Post!
   updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
   updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
@@ -50,10 +548,232 @@ type PageInfo {
   endCursor: String
 }
 
+type Paragraph {
+  id: ID!
+  body: String!
+  article: Article!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ParagraphConnection {
+  pageInfo: PageInfo!
+  edges: [ParagraphEdge]!
+  aggregate: AggregateParagraph!
+}
+
+input ParagraphCreateInput {
+  id: ID
+  body: String!
+  article: ArticleCreateOneWithoutParagraphsInput!
+}
+
+input ParagraphCreateManyWithoutArticleInput {
+  create: [ParagraphCreateWithoutArticleInput!]
+  connect: [ParagraphWhereUniqueInput!]
+}
+
+input ParagraphCreateWithoutArticleInput {
+  id: ID
+  body: String!
+}
+
+type ParagraphEdge {
+  node: Paragraph!
+  cursor: String!
+}
+
+enum ParagraphOrderByInput {
+  id_ASC
+  id_DESC
+  body_ASC
+  body_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ParagraphPreviousValues {
+  id: ID!
+  body: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ParagraphScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  body: String
+  body_not: String
+  body_in: [String!]
+  body_not_in: [String!]
+  body_lt: String
+  body_lte: String
+  body_gt: String
+  body_gte: String
+  body_contains: String
+  body_not_contains: String
+  body_starts_with: String
+  body_not_starts_with: String
+  body_ends_with: String
+  body_not_ends_with: String
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ParagraphScalarWhereInput!]
+  OR: [ParagraphScalarWhereInput!]
+  NOT: [ParagraphScalarWhereInput!]
+}
+
+type ParagraphSubscriptionPayload {
+  mutation: MutationType!
+  node: Paragraph
+  updatedFields: [String!]
+  previousValues: ParagraphPreviousValues
+}
+
+input ParagraphSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ParagraphWhereInput
+  AND: [ParagraphSubscriptionWhereInput!]
+  OR: [ParagraphSubscriptionWhereInput!]
+  NOT: [ParagraphSubscriptionWhereInput!]
+}
+
+input ParagraphUpdateInput {
+  body: String
+  article: ArticleUpdateOneRequiredWithoutParagraphsInput
+}
+
+input ParagraphUpdateManyDataInput {
+  body: String
+}
+
+input ParagraphUpdateManyMutationInput {
+  body: String
+}
+
+input ParagraphUpdateManyWithoutArticleInput {
+  create: [ParagraphCreateWithoutArticleInput!]
+  delete: [ParagraphWhereUniqueInput!]
+  connect: [ParagraphWhereUniqueInput!]
+  set: [ParagraphWhereUniqueInput!]
+  disconnect: [ParagraphWhereUniqueInput!]
+  update: [ParagraphUpdateWithWhereUniqueWithoutArticleInput!]
+  upsert: [ParagraphUpsertWithWhereUniqueWithoutArticleInput!]
+  deleteMany: [ParagraphScalarWhereInput!]
+  updateMany: [ParagraphUpdateManyWithWhereNestedInput!]
+}
+
+input ParagraphUpdateManyWithWhereNestedInput {
+  where: ParagraphScalarWhereInput!
+  data: ParagraphUpdateManyDataInput!
+}
+
+input ParagraphUpdateWithoutArticleDataInput {
+  body: String
+}
+
+input ParagraphUpdateWithWhereUniqueWithoutArticleInput {
+  where: ParagraphWhereUniqueInput!
+  data: ParagraphUpdateWithoutArticleDataInput!
+}
+
+input ParagraphUpsertWithWhereUniqueWithoutArticleInput {
+  where: ParagraphWhereUniqueInput!
+  update: ParagraphUpdateWithoutArticleDataInput!
+  create: ParagraphCreateWithoutArticleInput!
+}
+
+input ParagraphWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  body: String
+  body_not: String
+  body_in: [String!]
+  body_not_in: [String!]
+  body_lt: String
+  body_lte: String
+  body_gt: String
+  body_gte: String
+  body_contains: String
+  body_not_contains: String
+  body_starts_with: String
+  body_not_starts_with: String
+  body_ends_with: String
+  body_not_ends_with: String
+  article: ArticleWhereInput
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [ParagraphWhereInput!]
+  OR: [ParagraphWhereInput!]
+  NOT: [ParagraphWhereInput!]
+}
+
+input ParagraphWhereUniqueInput {
+  id: ID
+}
+
 type Post {
   id: ID!
   title: String!
   body: String
+  active: Boolean!
   author: User!
   createdAt: DateTime!
   updatedAt: DateTime!
@@ -69,6 +789,7 @@ input PostCreateInput {
   id: ID
   title: String!
   body: String
+  active: Boolean
   author: UserCreateOneWithoutPostInput!
 }
 
@@ -81,6 +802,7 @@ input PostCreateWithoutAuthorInput {
   id: ID
   title: String!
   body: String
+  active: Boolean
 }
 
 type PostEdge {
@@ -95,6 +817,8 @@ enum PostOrderByInput {
   title_DESC
   body_ASC
   body_DESC
+  active_ASC
+  active_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -105,6 +829,7 @@ type PostPreviousValues {
   id: ID!
   title: String!
   body: String
+  active: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -152,6 +877,8 @@ input PostScalarWhereInput {
   body_not_starts_with: String
   body_ends_with: String
   body_not_ends_with: String
+  active: Boolean
+  active_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -194,17 +921,20 @@ input PostSubscriptionWhereInput {
 input PostUpdateInput {
   title: String
   body: String
+  active: Boolean
   author: UserUpdateOneRequiredWithoutPostInput
 }
 
 input PostUpdateManyDataInput {
   title: String
   body: String
+  active: Boolean
 }
 
 input PostUpdateManyMutationInput {
   title: String
   body: String
+  active: Boolean
 }
 
 input PostUpdateManyWithoutAuthorInput {
@@ -227,6 +957,7 @@ input PostUpdateManyWithWhereNestedInput {
 input PostUpdateWithoutAuthorDataInput {
   title: String
   body: String
+  active: Boolean
 }
 
 input PostUpdateWithWhereUniqueWithoutAuthorInput {
@@ -283,6 +1014,8 @@ input PostWhereInput {
   body_not_starts_with: String
   body_ends_with: String
   body_not_ends_with: String
+  active: Boolean
+  active_not: Boolean
   author: UserWhereInput
   createdAt: DateTime
   createdAt_not: DateTime
@@ -310,6 +1043,15 @@ input PostWhereUniqueInput {
 }
 
 type Query {
+  article(where: ArticleWhereUniqueInput!): Article
+  articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article]!
+  articlesConnection(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ArticleConnection!
+  articleSection(where: ArticleSectionWhereUniqueInput!): ArticleSection
+  articleSections(where: ArticleSectionWhereInput, orderBy: ArticleSectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [ArticleSection]!
+  articleSectionsConnection(where: ArticleSectionWhereInput, orderBy: ArticleSectionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ArticleSectionConnection!
+  paragraph(where: ParagraphWhereUniqueInput!): Paragraph
+  paragraphs(where: ParagraphWhereInput, orderBy: ParagraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Paragraph]!
+  paragraphsConnection(where: ParagraphWhereInput, orderBy: ParagraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ParagraphConnection!
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
@@ -320,6 +1062,9 @@ type Query {
 }
 
 type Subscription {
+  article(where: ArticleSubscriptionWhereInput): ArticleSubscriptionPayload
+  articleSection(where: ArticleSectionSubscriptionWhereInput): ArticleSectionSubscriptionPayload
+  paragraph(where: ParagraphSubscriptionWhereInput): ParagraphSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }

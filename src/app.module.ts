@@ -6,6 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { APP_PIPE } from '@nestjs/core';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
+import { ArticleModule } from './article/article.module';
+import { ArticleSectionModule } from './articleSection/articleSection.module';
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { UserModule } from './user/user.module';
     PrismaModule,
     AuthModule,
     PostModule,
+    ArticleModule,
+    ArticleSectionModule,
     UserModule,
   ],
   providers: [

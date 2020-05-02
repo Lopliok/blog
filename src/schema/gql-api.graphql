@@ -11,6 +11,38 @@ type Post {
   title: String!
   body: String
   author: User!
+  active: Boolean!
+}
+
+type Article {
+  id: ID!
+  title: String!
+  paragraphs: [Paragraph!]!
+  active: Boolean!
+  img: String
+  section: ArticleSection
+}
+
+type ArticleSection {
+  id: ID!
+  title: String!
+  articles: [Article]!
+}
+
+input ArticleSectionInput {
+  title: String!
+}
+
+input ArticleSectionUpdateInput {
+  id: ID!
+  title: String
+  articles: [ArticleUpdateInput]
+}
+
+type Paragraph {
+  id: ID!
+  body: String!
+  article: Article!
 }
 
 input SignUpInput {
@@ -26,6 +58,27 @@ input LoginInput {
 input PostInput {
   title: String!
   body: String
+  active: Boolean
+}
+
+input ParagraphUpdateInput {
+  id: ID!
+  body: String!
+}
+
+input ArticleInput {
+  title: String!
+  paragraphs: [String!]!
+  active: Boolean
+  img: String
+}
+
+input ArticleUpdateInput {
+  id: ID!
+  title: String
+  paragraphs: [ParagraphUpdateInput!]
+  active: Boolean
+  img: String
 }
 
 type AuthPayload {
@@ -37,10 +90,17 @@ type Query {
   post(id: ID!): Post!
   posts: [Post!]!
   myPosts: [Post!]!
+  articles: [Article!]!
+  articleSections: [ArticleSection!]!
+  article(id: ID!): Article
 }
 
 type Mutation {
   signup(signUpInput: SignUpInput): AuthPayload!
   login(loginInput: LoginInput): AuthPayload!
   createPost(postInput: PostInput): Post!
+  createArticle(articleInput: ArticleInput): Article!
+  updateArticle(articleUpdateInput: ArticleUpdateInput): Article!
+  createArticleSection(articleSectionInput: ArticleSectionInput): ArticleSection!
+  updateArticleSection(articleSectionUpdateInput: ArticleSectionUpdateInput): ArticleSection!
 }
