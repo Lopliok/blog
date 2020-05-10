@@ -18,6 +18,10 @@ type AggregatePost {
   count: Int!
 }
 
+type AggregatePremiumSubscription {
+  count: Int!
+}
+
 type AggregateUser {
   count: Int!
 }
@@ -27,7 +31,9 @@ type Article {
   title: String!
   paragraphs(where: ParagraphWhereInput, orderBy: ParagraphOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Paragraph!]
   img: String
+  deleted: Boolean!
   active: Boolean!
+  advanced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
   section: ArticleSection
@@ -44,7 +50,9 @@ input ArticleCreateInput {
   title: String!
   paragraphs: ParagraphCreateManyWithoutArticleInput
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
   section: ArticleSectionCreateOneWithoutArticlesInput
 }
 
@@ -62,7 +70,9 @@ input ArticleCreateWithoutParagraphsInput {
   id: ID
   title: String!
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
   section: ArticleSectionCreateOneWithoutArticlesInput
 }
 
@@ -71,7 +81,9 @@ input ArticleCreateWithoutSectionInput {
   title: String!
   paragraphs: ParagraphCreateManyWithoutArticleInput
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
 }
 
 type ArticleEdge {
@@ -86,8 +98,12 @@ enum ArticleOrderByInput {
   title_DESC
   img_ASC
   img_DESC
+  deleted_ASC
+  deleted_DESC
   active_ASC
   active_DESC
+  advanced_ASC
+  advanced_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -98,7 +114,9 @@ type ArticlePreviousValues {
   id: ID!
   title: String!
   img: String
+  deleted: Boolean!
   active: Boolean!
+  advanced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -146,8 +164,12 @@ input ArticleScalarWhereInput {
   img_not_starts_with: String
   img_ends_with: String
   img_not_ends_with: String
+  deleted: Boolean
+  deleted_not: Boolean
   active: Boolean
   active_not: Boolean
+  advanced: Boolean
+  advanced_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -173,6 +195,9 @@ type ArticleSection {
   id: ID!
   title: String!
   articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article!]
+  deleted: Boolean!
+  active: Boolean!
+  advanced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -187,6 +212,9 @@ input ArticleSectionCreateInput {
   id: ID
   title: String!
   articles: ArticleCreateManyWithoutSectionInput
+  deleted: Boolean
+  active: Boolean
+  advanced: Boolean
 }
 
 input ArticleSectionCreateOneWithoutArticlesInput {
@@ -197,6 +225,9 @@ input ArticleSectionCreateOneWithoutArticlesInput {
 input ArticleSectionCreateWithoutArticlesInput {
   id: ID
   title: String!
+  deleted: Boolean
+  active: Boolean
+  advanced: Boolean
 }
 
 type ArticleSectionEdge {
@@ -209,6 +240,12 @@ enum ArticleSectionOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  deleted_ASC
+  deleted_DESC
+  active_ASC
+  active_DESC
+  advanced_ASC
+  advanced_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -218,6 +255,9 @@ enum ArticleSectionOrderByInput {
 type ArticleSectionPreviousValues {
   id: ID!
   title: String!
+  deleted: Boolean!
+  active: Boolean!
+  advanced: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -243,10 +283,16 @@ input ArticleSectionSubscriptionWhereInput {
 input ArticleSectionUpdateInput {
   title: String
   articles: ArticleUpdateManyWithoutSectionInput
+  deleted: Boolean
+  active: Boolean
+  advanced: Boolean
 }
 
 input ArticleSectionUpdateManyMutationInput {
   title: String
+  deleted: Boolean
+  active: Boolean
+  advanced: Boolean
 }
 
 input ArticleSectionUpdateOneWithoutArticlesInput {
@@ -260,6 +306,9 @@ input ArticleSectionUpdateOneWithoutArticlesInput {
 
 input ArticleSectionUpdateWithoutArticlesDataInput {
   title: String
+  deleted: Boolean
+  active: Boolean
+  advanced: Boolean
 }
 
 input ArticleSectionUpsertWithoutArticlesInput {
@@ -299,6 +348,12 @@ input ArticleSectionWhereInput {
   articles_every: ArticleWhereInput
   articles_some: ArticleWhereInput
   articles_none: ArticleWhereInput
+  deleted: Boolean
+  deleted_not: Boolean
+  active: Boolean
+  active_not: Boolean
+  advanced: Boolean
+  advanced_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -346,20 +401,26 @@ input ArticleUpdateInput {
   title: String
   paragraphs: ParagraphUpdateManyWithoutArticleInput
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
   section: ArticleSectionUpdateOneWithoutArticlesInput
 }
 
 input ArticleUpdateManyDataInput {
   title: String
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
 }
 
 input ArticleUpdateManyMutationInput {
   title: String
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
 }
 
 input ArticleUpdateManyWithoutSectionInput {
@@ -389,7 +450,9 @@ input ArticleUpdateOneRequiredWithoutParagraphsInput {
 input ArticleUpdateWithoutParagraphsDataInput {
   title: String
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
   section: ArticleSectionUpdateOneWithoutArticlesInput
 }
 
@@ -397,7 +460,9 @@ input ArticleUpdateWithoutSectionDataInput {
   title: String
   paragraphs: ParagraphUpdateManyWithoutArticleInput
   img: String
+  deleted: Boolean
   active: Boolean
+  advanced: Boolean
 }
 
 input ArticleUpdateWithWhereUniqueWithoutSectionInput {
@@ -462,8 +527,12 @@ input ArticleWhereInput {
   img_not_starts_with: String
   img_ends_with: String
   img_not_ends_with: String
+  deleted: Boolean
+  deleted_not: Boolean
   active: Boolean
   active_not: Boolean
+  advanced: Boolean
+  advanced_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -523,6 +592,12 @@ type Mutation {
   upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
   deletePost(where: PostWhereUniqueInput!): Post
   deleteManyPosts(where: PostWhereInput): BatchPayload!
+  createPremiumSubscription(data: PremiumSubscriptionCreateInput!): PremiumSubscription!
+  updatePremiumSubscription(data: PremiumSubscriptionUpdateInput!, where: PremiumSubscriptionWhereUniqueInput!): PremiumSubscription
+  updateManyPremiumSubscriptions(data: PremiumSubscriptionUpdateManyMutationInput!, where: PremiumSubscriptionWhereInput): BatchPayload!
+  upsertPremiumSubscription(where: PremiumSubscriptionWhereUniqueInput!, create: PremiumSubscriptionCreateInput!, update: PremiumSubscriptionUpdateInput!): PremiumSubscription!
+  deletePremiumSubscription(where: PremiumSubscriptionWhereUniqueInput!): PremiumSubscription
+  deleteManyPremiumSubscriptions(where: PremiumSubscriptionWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
@@ -552,6 +627,7 @@ type Paragraph {
   id: ID!
   body: String!
   article: Article!
+  deleted: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -566,6 +642,7 @@ input ParagraphCreateInput {
   id: ID
   body: String!
   article: ArticleCreateOneWithoutParagraphsInput!
+  deleted: Boolean
 }
 
 input ParagraphCreateManyWithoutArticleInput {
@@ -576,6 +653,7 @@ input ParagraphCreateManyWithoutArticleInput {
 input ParagraphCreateWithoutArticleInput {
   id: ID
   body: String!
+  deleted: Boolean
 }
 
 type ParagraphEdge {
@@ -588,6 +666,8 @@ enum ParagraphOrderByInput {
   id_DESC
   body_ASC
   body_DESC
+  deleted_ASC
+  deleted_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -597,6 +677,7 @@ enum ParagraphOrderByInput {
 type ParagraphPreviousValues {
   id: ID!
   body: String!
+  deleted: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -630,6 +711,8 @@ input ParagraphScalarWhereInput {
   body_not_starts_with: String
   body_ends_with: String
   body_not_ends_with: String
+  deleted: Boolean
+  deleted_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -672,14 +755,17 @@ input ParagraphSubscriptionWhereInput {
 input ParagraphUpdateInput {
   body: String
   article: ArticleUpdateOneRequiredWithoutParagraphsInput
+  deleted: Boolean
 }
 
 input ParagraphUpdateManyDataInput {
   body: String
+  deleted: Boolean
 }
 
 input ParagraphUpdateManyMutationInput {
   body: String
+  deleted: Boolean
 }
 
 input ParagraphUpdateManyWithoutArticleInput {
@@ -701,6 +787,7 @@ input ParagraphUpdateManyWithWhereNestedInput {
 
 input ParagraphUpdateWithoutArticleDataInput {
   body: String
+  deleted: Boolean
 }
 
 input ParagraphUpdateWithWhereUniqueWithoutArticleInput {
@@ -744,6 +831,8 @@ input ParagraphWhereInput {
   body_ends_with: String
   body_not_ends_with: String
   article: ArticleWhereInput
+  deleted: Boolean
+  deleted_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]
@@ -1042,6 +1131,255 @@ input PostWhereUniqueInput {
   id: ID
 }
 
+type PremiumSubscription {
+  id: ID!
+  from: DateTime!
+  to: DateTime!
+  user: User!
+  freeTrialActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PremiumSubscriptionConnection {
+  pageInfo: PageInfo!
+  edges: [PremiumSubscriptionEdge]!
+  aggregate: AggregatePremiumSubscription!
+}
+
+input PremiumSubscriptionCreateInput {
+  id: ID
+  from: DateTime!
+  to: DateTime!
+  user: UserCreateOneWithoutSubscriptionInput!
+  freeTrialActive: Boolean!
+}
+
+input PremiumSubscriptionCreateManyWithoutUserInput {
+  create: [PremiumSubscriptionCreateWithoutUserInput!]
+  connect: [PremiumSubscriptionWhereUniqueInput!]
+}
+
+input PremiumSubscriptionCreateWithoutUserInput {
+  id: ID
+  from: DateTime!
+  to: DateTime!
+  freeTrialActive: Boolean!
+}
+
+type PremiumSubscriptionEdge {
+  node: PremiumSubscription!
+  cursor: String!
+}
+
+enum PremiumSubscriptionOrderByInput {
+  id_ASC
+  id_DESC
+  from_ASC
+  from_DESC
+  to_ASC
+  to_DESC
+  freeTrialActive_ASC
+  freeTrialActive_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type PremiumSubscriptionPreviousValues {
+  id: ID!
+  from: DateTime!
+  to: DateTime!
+  freeTrialActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input PremiumSubscriptionScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  from: DateTime
+  from_not: DateTime
+  from_in: [DateTime!]
+  from_not_in: [DateTime!]
+  from_lt: DateTime
+  from_lte: DateTime
+  from_gt: DateTime
+  from_gte: DateTime
+  to: DateTime
+  to_not: DateTime
+  to_in: [DateTime!]
+  to_not_in: [DateTime!]
+  to_lt: DateTime
+  to_lte: DateTime
+  to_gt: DateTime
+  to_gte: DateTime
+  freeTrialActive: Boolean
+  freeTrialActive_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [PremiumSubscriptionScalarWhereInput!]
+  OR: [PremiumSubscriptionScalarWhereInput!]
+  NOT: [PremiumSubscriptionScalarWhereInput!]
+}
+
+type PremiumSubscriptionSubscriptionPayload {
+  mutation: MutationType!
+  node: PremiumSubscription
+  updatedFields: [String!]
+  previousValues: PremiumSubscriptionPreviousValues
+}
+
+input PremiumSubscriptionSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: PremiumSubscriptionWhereInput
+  AND: [PremiumSubscriptionSubscriptionWhereInput!]
+  OR: [PremiumSubscriptionSubscriptionWhereInput!]
+  NOT: [PremiumSubscriptionSubscriptionWhereInput!]
+}
+
+input PremiumSubscriptionUpdateInput {
+  from: DateTime
+  to: DateTime
+  user: UserUpdateOneRequiredWithoutSubscriptionInput
+  freeTrialActive: Boolean
+}
+
+input PremiumSubscriptionUpdateManyDataInput {
+  from: DateTime
+  to: DateTime
+  freeTrialActive: Boolean
+}
+
+input PremiumSubscriptionUpdateManyMutationInput {
+  from: DateTime
+  to: DateTime
+  freeTrialActive: Boolean
+}
+
+input PremiumSubscriptionUpdateManyWithoutUserInput {
+  create: [PremiumSubscriptionCreateWithoutUserInput!]
+  delete: [PremiumSubscriptionWhereUniqueInput!]
+  connect: [PremiumSubscriptionWhereUniqueInput!]
+  set: [PremiumSubscriptionWhereUniqueInput!]
+  disconnect: [PremiumSubscriptionWhereUniqueInput!]
+  update: [PremiumSubscriptionUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [PremiumSubscriptionUpsertWithWhereUniqueWithoutUserInput!]
+  deleteMany: [PremiumSubscriptionScalarWhereInput!]
+  updateMany: [PremiumSubscriptionUpdateManyWithWhereNestedInput!]
+}
+
+input PremiumSubscriptionUpdateManyWithWhereNestedInput {
+  where: PremiumSubscriptionScalarWhereInput!
+  data: PremiumSubscriptionUpdateManyDataInput!
+}
+
+input PremiumSubscriptionUpdateWithoutUserDataInput {
+  from: DateTime
+  to: DateTime
+  freeTrialActive: Boolean
+}
+
+input PremiumSubscriptionUpdateWithWhereUniqueWithoutUserInput {
+  where: PremiumSubscriptionWhereUniqueInput!
+  data: PremiumSubscriptionUpdateWithoutUserDataInput!
+}
+
+input PremiumSubscriptionUpsertWithWhereUniqueWithoutUserInput {
+  where: PremiumSubscriptionWhereUniqueInput!
+  update: PremiumSubscriptionUpdateWithoutUserDataInput!
+  create: PremiumSubscriptionCreateWithoutUserInput!
+}
+
+input PremiumSubscriptionWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  from: DateTime
+  from_not: DateTime
+  from_in: [DateTime!]
+  from_not_in: [DateTime!]
+  from_lt: DateTime
+  from_lte: DateTime
+  from_gt: DateTime
+  from_gte: DateTime
+  to: DateTime
+  to_not: DateTime
+  to_in: [DateTime!]
+  to_not_in: [DateTime!]
+  to_lt: DateTime
+  to_lte: DateTime
+  to_gt: DateTime
+  to_gte: DateTime
+  user: UserWhereInput
+  freeTrialActive: Boolean
+  freeTrialActive_not: Boolean
+  createdAt: DateTime
+  createdAt_not: DateTime
+  createdAt_in: [DateTime!]
+  createdAt_not_in: [DateTime!]
+  createdAt_lt: DateTime
+  createdAt_lte: DateTime
+  createdAt_gt: DateTime
+  createdAt_gte: DateTime
+  updatedAt: DateTime
+  updatedAt_not: DateTime
+  updatedAt_in: [DateTime!]
+  updatedAt_not_in: [DateTime!]
+  updatedAt_lt: DateTime
+  updatedAt_lte: DateTime
+  updatedAt_gt: DateTime
+  updatedAt_gte: DateTime
+  AND: [PremiumSubscriptionWhereInput!]
+  OR: [PremiumSubscriptionWhereInput!]
+  NOT: [PremiumSubscriptionWhereInput!]
+}
+
+input PremiumSubscriptionWhereUniqueInput {
+  id: ID
+}
+
 type Query {
   article(where: ArticleWhereUniqueInput!): Article
   articles(where: ArticleWhereInput, orderBy: ArticleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Article]!
@@ -1055,6 +1393,9 @@ type Query {
   post(where: PostWhereUniqueInput!): Post
   posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
   postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  premiumSubscription(where: PremiumSubscriptionWhereUniqueInput!): PremiumSubscription
+  premiumSubscriptions(where: PremiumSubscriptionWhereInput, orderBy: PremiumSubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PremiumSubscription]!
+  premiumSubscriptionsConnection(where: PremiumSubscriptionWhereInput, orderBy: PremiumSubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PremiumSubscriptionConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
@@ -1066,6 +1407,7 @@ type Subscription {
   articleSection(where: ArticleSectionSubscriptionWhereInput): ArticleSectionSubscriptionPayload
   paragraph(where: ParagraphSubscriptionWhereInput): ParagraphSubscriptionPayload
   post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  premiumSubscription(where: PremiumSubscriptionSubscriptionWhereInput): PremiumSubscriptionSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
 }
 
@@ -1074,6 +1416,9 @@ type User {
   email: String!
   password: String!
   post(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
+  subscription(where: PremiumSubscriptionWhereInput, orderBy: PremiumSubscriptionOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [PremiumSubscription!]
+  admin: Boolean!
+  special: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1089,6 +1434,9 @@ input UserCreateInput {
   email: String!
   password: String!
   post: PostCreateManyWithoutAuthorInput
+  subscription: PremiumSubscriptionCreateManyWithoutUserInput
+  admin: Boolean
+  special: Boolean
 }
 
 input UserCreateOneWithoutPostInput {
@@ -1096,10 +1444,27 @@ input UserCreateOneWithoutPostInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutSubscriptionInput {
+  create: UserCreateWithoutSubscriptionInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreateWithoutPostInput {
   id: ID
   email: String!
   password: String!
+  subscription: PremiumSubscriptionCreateManyWithoutUserInput
+  admin: Boolean
+  special: Boolean
+}
+
+input UserCreateWithoutSubscriptionInput {
+  id: ID
+  email: String!
+  password: String!
+  post: PostCreateManyWithoutAuthorInput
+  admin: Boolean
+  special: Boolean
 }
 
 type UserEdge {
@@ -1114,6 +1479,10 @@ enum UserOrderByInput {
   email_DESC
   password_ASC
   password_DESC
+  admin_ASC
+  admin_DESC
+  special_ASC
+  special_DESC
   createdAt_ASC
   createdAt_DESC
   updatedAt_ASC
@@ -1124,6 +1493,8 @@ type UserPreviousValues {
   id: ID!
   email: String!
   password: String!
+  admin: Boolean!
+  special: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -1150,11 +1521,16 @@ input UserUpdateInput {
   email: String
   password: String
   post: PostUpdateManyWithoutAuthorInput
+  subscription: PremiumSubscriptionUpdateManyWithoutUserInput
+  admin: Boolean
+  special: Boolean
 }
 
 input UserUpdateManyMutationInput {
   email: String
   password: String
+  admin: Boolean
+  special: Boolean
 }
 
 input UserUpdateOneRequiredWithoutPostInput {
@@ -1164,14 +1540,37 @@ input UserUpdateOneRequiredWithoutPostInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutSubscriptionInput {
+  create: UserCreateWithoutSubscriptionInput
+  update: UserUpdateWithoutSubscriptionDataInput
+  upsert: UserUpsertWithoutSubscriptionInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdateWithoutPostDataInput {
   email: String
   password: String
+  subscription: PremiumSubscriptionUpdateManyWithoutUserInput
+  admin: Boolean
+  special: Boolean
+}
+
+input UserUpdateWithoutSubscriptionDataInput {
+  email: String
+  password: String
+  post: PostUpdateManyWithoutAuthorInput
+  admin: Boolean
+  special: Boolean
 }
 
 input UserUpsertWithoutPostInput {
   update: UserUpdateWithoutPostDataInput!
   create: UserCreateWithoutPostInput!
+}
+
+input UserUpsertWithoutSubscriptionInput {
+  update: UserUpdateWithoutSubscriptionDataInput!
+  create: UserCreateWithoutSubscriptionInput!
 }
 
 input UserWhereInput {
@@ -1220,6 +1619,13 @@ input UserWhereInput {
   post_every: PostWhereInput
   post_some: PostWhereInput
   post_none: PostWhereInput
+  subscription_every: PremiumSubscriptionWhereInput
+  subscription_some: PremiumSubscriptionWhereInput
+  subscription_none: PremiumSubscriptionWhereInput
+  admin: Boolean
+  admin_not: Boolean
+  special: Boolean
+  special_not: Boolean
   createdAt: DateTime
   createdAt_not: DateTime
   createdAt_in: [DateTime!]

@@ -6,8 +6,6 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
 
-console.log(process.env);
-
 @Module({
   imports: [
     PrismaModule,

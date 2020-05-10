@@ -19,6 +19,8 @@ type Article {
   title: String!
   paragraphs: [Paragraph!]!
   active: Boolean!
+  advanced: Boolean!
+  deleted: Boolean!
   img: String
   section: ArticleSection
 }
@@ -26,6 +28,9 @@ type Article {
 type ArticleSection {
   id: ID!
   title: String!
+  active: Boolean!
+  advanced: Boolean!
+  deleted: Boolean!
   articles: [Article]!
 }
 
@@ -36,12 +41,16 @@ input ArticleSectionInput {
 input ArticleSectionUpdateInput {
   id: ID!
   title: String
+  active: Boolean
+  advanced: Boolean
+  deleted: Boolean
   articles: [ArticleUpdateInput]
 }
 
 type Paragraph {
   id: ID!
   body: String!
+  deleted: Boolean!
   article: Article!
 }
 
@@ -63,13 +72,16 @@ input PostInput {
 
 input ParagraphUpdateInput {
   id: ID!
-  body: String!
+  deleted: Boolean
+  body: String
 }
 
 input ArticleInput {
   title: String!
   paragraphs: [String!]!
   active: Boolean
+  section: String
+  advanced: Boolean
   img: String
 }
 
@@ -77,6 +89,9 @@ input ArticleUpdateInput {
   id: ID!
   title: String
   paragraphs: [ParagraphUpdateInput!]
+  newParagraphs: [String!]
+  advanced: Boolean
+  deleted: Boolean
   active: Boolean
   img: String
 }

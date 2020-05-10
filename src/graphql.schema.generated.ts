@@ -9,6 +9,8 @@ export class ArticleInput {
     title: string;
     paragraphs: string[];
     active?: boolean;
+    section?: string;
+    advanced?: boolean;
     img?: string;
 }
 
@@ -19,6 +21,9 @@ export class ArticleSectionInput {
 export class ArticleSectionUpdateInput {
     id: string;
     title?: string;
+    active?: boolean;
+    advanced?: boolean;
+    deleted?: boolean;
     articles?: ArticleUpdateInput[];
 }
 
@@ -26,6 +31,9 @@ export class ArticleUpdateInput {
     id: string;
     title?: string;
     paragraphs?: ParagraphUpdateInput[];
+    newParagraphs?: string[];
+    advanced?: boolean;
+    deleted?: boolean;
     active?: boolean;
     img?: string;
 }
@@ -37,7 +45,8 @@ export class LoginInput {
 
 export class ParagraphUpdateInput {
     id: string;
-    body: string;
+    deleted?: boolean;
+    body?: string;
 }
 
 export class PostInput {
@@ -56,6 +65,8 @@ export class Article {
     title: string;
     paragraphs: Paragraph[];
     active: boolean;
+    advanced: boolean;
+    deleted: boolean;
     img?: string;
     section?: ArticleSection;
 }
@@ -63,6 +74,9 @@ export class Article {
 export class ArticleSection {
     id: string;
     title: string;
+    active: boolean;
+    advanced: boolean;
+    deleted: boolean;
     articles: Article[];
 }
 
@@ -90,6 +104,7 @@ export abstract class IMutation {
 export class Paragraph {
     id: string;
     body: string;
+    deleted: boolean;
     article: Article;
 }
 

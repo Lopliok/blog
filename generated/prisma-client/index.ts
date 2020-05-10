@@ -20,6 +20,9 @@ export interface Exists {
   articleSection: (where?: ArticleSectionWhereInput) => Promise<boolean>;
   paragraph: (where?: ParagraphWhereInput) => Promise<boolean>;
   post: (where?: PostWhereInput) => Promise<boolean>;
+  premiumSubscription: (
+    where?: PremiumSubscriptionWhereInput
+  ) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
 }
 
@@ -120,6 +123,27 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => PostConnectionPromise;
+  premiumSubscription: (
+    where: PremiumSubscriptionWhereUniqueInput
+  ) => PremiumSubscriptionNullablePromise;
+  premiumSubscriptions: (args?: {
+    where?: PremiumSubscriptionWhereInput;
+    orderBy?: PremiumSubscriptionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<PremiumSubscription>;
+  premiumSubscriptionsConnection: (args?: {
+    where?: PremiumSubscriptionWhereInput;
+    orderBy?: PremiumSubscriptionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => PremiumSubscriptionConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -215,6 +239,28 @@ export interface Prisma {
   }) => PostPromise;
   deletePost: (where: PostWhereUniqueInput) => PostPromise;
   deleteManyPosts: (where?: PostWhereInput) => BatchPayloadPromise;
+  createPremiumSubscription: (
+    data: PremiumSubscriptionCreateInput
+  ) => PremiumSubscriptionPromise;
+  updatePremiumSubscription: (args: {
+    data: PremiumSubscriptionUpdateInput;
+    where: PremiumSubscriptionWhereUniqueInput;
+  }) => PremiumSubscriptionPromise;
+  updateManyPremiumSubscriptions: (args: {
+    data: PremiumSubscriptionUpdateManyMutationInput;
+    where?: PremiumSubscriptionWhereInput;
+  }) => BatchPayloadPromise;
+  upsertPremiumSubscription: (args: {
+    where: PremiumSubscriptionWhereUniqueInput;
+    create: PremiumSubscriptionCreateInput;
+    update: PremiumSubscriptionUpdateInput;
+  }) => PremiumSubscriptionPromise;
+  deletePremiumSubscription: (
+    where: PremiumSubscriptionWhereUniqueInput
+  ) => PremiumSubscriptionPromise;
+  deleteManyPremiumSubscriptions: (
+    where?: PremiumSubscriptionWhereInput
+  ) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -252,6 +298,9 @@ export interface Subscription {
   post: (
     where?: PostSubscriptionWhereInput
   ) => PostSubscriptionPayloadSubscription;
+  premiumSubscription: (
+    where?: PremiumSubscriptionSubscriptionWhereInput
+  ) => PremiumSubscriptionSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
@@ -270,6 +319,8 @@ export type ParagraphOrderByInput =
   | "id_DESC"
   | "body_ASC"
   | "body_DESC"
+  | "deleted_ASC"
+  | "deleted_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -282,8 +333,12 @@ export type ArticleOrderByInput =
   | "title_DESC"
   | "img_ASC"
   | "img_DESC"
+  | "deleted_ASC"
+  | "deleted_DESC"
   | "active_ASC"
   | "active_DESC"
+  | "advanced_ASC"
+  | "advanced_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -294,6 +349,12 @@ export type ArticleSectionOrderByInput =
   | "id_DESC"
   | "title_ASC"
   | "title_DESC"
+  | "deleted_ASC"
+  | "deleted_DESC"
+  | "active_ASC"
+  | "active_DESC"
+  | "advanced_ASC"
+  | "advanced_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -313,6 +374,20 @@ export type PostOrderByInput =
   | "updatedAt_ASC"
   | "updatedAt_DESC";
 
+export type PremiumSubscriptionOrderByInput =
+  | "id_ASC"
+  | "id_DESC"
+  | "from_ASC"
+  | "from_DESC"
+  | "to_ASC"
+  | "to_DESC"
+  | "freeTrialActive_ASC"
+  | "freeTrialActive_DESC"
+  | "createdAt_ASC"
+  | "createdAt_DESC"
+  | "updatedAt_ASC"
+  | "updatedAt_DESC";
+
 export type UserOrderByInput =
   | "id_ASC"
   | "id_DESC"
@@ -320,6 +395,10 @@ export type UserOrderByInput =
   | "email_DESC"
   | "password_ASC"
   | "password_DESC"
+  | "admin_ASC"
+  | "admin_DESC"
+  | "special_ASC"
+  | "special_DESC"
   | "createdAt_ASC"
   | "createdAt_DESC"
   | "updatedAt_ASC"
@@ -361,6 +440,8 @@ export interface ParagraphWhereInput {
   body_ends_with?: Maybe<String>;
   body_not_ends_with?: Maybe<String>;
   article?: Maybe<ArticleWhereInput>;
+  deleted?: Maybe<Boolean>;
+  deleted_not?: Maybe<Boolean>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -428,8 +509,12 @@ export interface ArticleWhereInput {
   img_not_starts_with?: Maybe<String>;
   img_ends_with?: Maybe<String>;
   img_not_ends_with?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
+  deleted_not?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
   active_not?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
+  advanced_not?: Maybe<Boolean>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -484,6 +569,12 @@ export interface ArticleSectionWhereInput {
   articles_every?: Maybe<ArticleWhereInput>;
   articles_some?: Maybe<ArticleWhereInput>;
   articles_none?: Maybe<ArticleWhereInput>;
+  deleted?: Maybe<Boolean>;
+  deleted_not?: Maybe<Boolean>;
+  active?: Maybe<Boolean>;
+  active_not?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
+  advanced_not?: Maybe<Boolean>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -630,6 +721,13 @@ export interface UserWhereInput {
   post_every?: Maybe<PostWhereInput>;
   post_some?: Maybe<PostWhereInput>;
   post_none?: Maybe<PostWhereInput>;
+  subscription_every?: Maybe<PremiumSubscriptionWhereInput>;
+  subscription_some?: Maybe<PremiumSubscriptionWhereInput>;
+  subscription_none?: Maybe<PremiumSubscriptionWhereInput>;
+  admin?: Maybe<Boolean>;
+  admin_not?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
+  special_not?: Maybe<Boolean>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -651,6 +749,65 @@ export interface UserWhereInput {
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
+export interface PremiumSubscriptionWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  from?: Maybe<DateTimeInput>;
+  from_not?: Maybe<DateTimeInput>;
+  from_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  from_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  from_lt?: Maybe<DateTimeInput>;
+  from_lte?: Maybe<DateTimeInput>;
+  from_gt?: Maybe<DateTimeInput>;
+  from_gte?: Maybe<DateTimeInput>;
+  to?: Maybe<DateTimeInput>;
+  to_not?: Maybe<DateTimeInput>;
+  to_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  to_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  to_lt?: Maybe<DateTimeInput>;
+  to_lte?: Maybe<DateTimeInput>;
+  to_gt?: Maybe<DateTimeInput>;
+  to_gte?: Maybe<DateTimeInput>;
+  user?: Maybe<UserWhereInput>;
+  freeTrialActive?: Maybe<Boolean>;
+  freeTrialActive_not?: Maybe<Boolean>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<PremiumSubscriptionWhereInput[] | PremiumSubscriptionWhereInput>;
+  OR?: Maybe<PremiumSubscriptionWhereInput[] | PremiumSubscriptionWhereInput>;
+  NOT?: Maybe<PremiumSubscriptionWhereInput[] | PremiumSubscriptionWhereInput>;
+}
+
+export type PremiumSubscriptionWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
+
 export type UserWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
   email?: Maybe<String>;
@@ -661,7 +818,9 @@ export interface ArticleCreateInput {
   title: String;
   paragraphs?: Maybe<ParagraphCreateManyWithoutArticleInput>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
   section?: Maybe<ArticleSectionCreateOneWithoutArticlesInput>;
 }
 
@@ -675,6 +834,7 @@ export interface ParagraphCreateManyWithoutArticleInput {
 export interface ParagraphCreateWithoutArticleInput {
   id?: Maybe<ID_Input>;
   body: String;
+  deleted?: Maybe<Boolean>;
 }
 
 export interface ArticleSectionCreateOneWithoutArticlesInput {
@@ -685,13 +845,18 @@ export interface ArticleSectionCreateOneWithoutArticlesInput {
 export interface ArticleSectionCreateWithoutArticlesInput {
   id?: Maybe<ID_Input>;
   title: String;
+  deleted?: Maybe<Boolean>;
+  active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleUpdateInput {
   title?: Maybe<String>;
   paragraphs?: Maybe<ParagraphUpdateManyWithoutArticleInput>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
   section?: Maybe<ArticleSectionUpdateOneWithoutArticlesInput>;
 }
 
@@ -725,6 +890,7 @@ export interface ParagraphUpdateWithWhereUniqueWithoutArticleInput {
 
 export interface ParagraphUpdateWithoutArticleDataInput {
   body?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
 }
 
 export interface ParagraphUpsertWithWhereUniqueWithoutArticleInput {
@@ -762,6 +928,8 @@ export interface ParagraphScalarWhereInput {
   body_not_starts_with?: Maybe<String>;
   body_ends_with?: Maybe<String>;
   body_not_ends_with?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
+  deleted_not?: Maybe<Boolean>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -790,6 +958,7 @@ export interface ParagraphUpdateManyWithWhereNestedInput {
 
 export interface ParagraphUpdateManyDataInput {
   body?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
 }
 
 export interface ArticleSectionUpdateOneWithoutArticlesInput {
@@ -803,6 +972,9 @@ export interface ArticleSectionUpdateOneWithoutArticlesInput {
 
 export interface ArticleSectionUpdateWithoutArticlesDataInput {
   title?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
+  active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleSectionUpsertWithoutArticlesInput {
@@ -813,13 +985,18 @@ export interface ArticleSectionUpsertWithoutArticlesInput {
 export interface ArticleUpdateManyMutationInput {
   title?: Maybe<String>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleSectionCreateInput {
   id?: Maybe<ID_Input>;
   title: String;
   articles?: Maybe<ArticleCreateManyWithoutSectionInput>;
+  deleted?: Maybe<Boolean>;
+  active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleCreateManyWithoutSectionInput {
@@ -834,12 +1011,17 @@ export interface ArticleCreateWithoutSectionInput {
   title: String;
   paragraphs?: Maybe<ParagraphCreateManyWithoutArticleInput>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleSectionUpdateInput {
   title?: Maybe<String>;
   articles?: Maybe<ArticleUpdateManyWithoutSectionInput>;
+  deleted?: Maybe<Boolean>;
+  active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleUpdateManyWithoutSectionInput {
@@ -874,7 +1056,9 @@ export interface ArticleUpdateWithoutSectionDataInput {
   title?: Maybe<String>;
   paragraphs?: Maybe<ParagraphUpdateManyWithoutArticleInput>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleUpsertWithWhereUniqueWithoutSectionInput {
@@ -926,8 +1110,12 @@ export interface ArticleScalarWhereInput {
   img_not_starts_with?: Maybe<String>;
   img_ends_with?: Maybe<String>;
   img_not_ends_with?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
+  deleted_not?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
   active_not?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
+  advanced_not?: Maybe<Boolean>;
   createdAt?: Maybe<DateTimeInput>;
   createdAt_not?: Maybe<DateTimeInput>;
   createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
@@ -957,17 +1145,23 @@ export interface ArticleUpdateManyWithWhereNestedInput {
 export interface ArticleUpdateManyDataInput {
   title?: Maybe<String>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ArticleSectionUpdateManyMutationInput {
   title?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
+  active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
 }
 
 export interface ParagraphCreateInput {
   id?: Maybe<ID_Input>;
   body: String;
   article: ArticleCreateOneWithoutParagraphsInput;
+  deleted?: Maybe<Boolean>;
 }
 
 export interface ArticleCreateOneWithoutParagraphsInput {
@@ -979,13 +1173,16 @@ export interface ArticleCreateWithoutParagraphsInput {
   id?: Maybe<ID_Input>;
   title: String;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
   section?: Maybe<ArticleSectionCreateOneWithoutArticlesInput>;
 }
 
 export interface ParagraphUpdateInput {
   body?: Maybe<String>;
   article?: Maybe<ArticleUpdateOneRequiredWithoutParagraphsInput>;
+  deleted?: Maybe<Boolean>;
 }
 
 export interface ArticleUpdateOneRequiredWithoutParagraphsInput {
@@ -998,7 +1195,9 @@ export interface ArticleUpdateOneRequiredWithoutParagraphsInput {
 export interface ArticleUpdateWithoutParagraphsDataInput {
   title?: Maybe<String>;
   img?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
   active?: Maybe<Boolean>;
+  advanced?: Maybe<Boolean>;
   section?: Maybe<ArticleSectionUpdateOneWithoutArticlesInput>;
 }
 
@@ -1009,6 +1208,7 @@ export interface ArticleUpsertWithoutParagraphsInput {
 
 export interface ParagraphUpdateManyMutationInput {
   body?: Maybe<String>;
+  deleted?: Maybe<Boolean>;
 }
 
 export interface PostCreateInput {
@@ -1028,6 +1228,26 @@ export interface UserCreateWithoutPostInput {
   id?: Maybe<ID_Input>;
   email: String;
   password: String;
+  subscription?: Maybe<PremiumSubscriptionCreateManyWithoutUserInput>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
+}
+
+export interface PremiumSubscriptionCreateManyWithoutUserInput {
+  create?: Maybe<
+    | PremiumSubscriptionCreateWithoutUserInput[]
+    | PremiumSubscriptionCreateWithoutUserInput
+  >;
+  connect?: Maybe<
+    PremiumSubscriptionWhereUniqueInput[] | PremiumSubscriptionWhereUniqueInput
+  >;
+}
+
+export interface PremiumSubscriptionCreateWithoutUserInput {
+  id?: Maybe<ID_Input>;
+  from: DateTimeInput;
+  to: DateTimeInput;
+  freeTrialActive: Boolean;
 }
 
 export interface PostUpdateInput {
@@ -1047,6 +1267,131 @@ export interface UserUpdateOneRequiredWithoutPostInput {
 export interface UserUpdateWithoutPostDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
+  subscription?: Maybe<PremiumSubscriptionUpdateManyWithoutUserInput>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
+}
+
+export interface PremiumSubscriptionUpdateManyWithoutUserInput {
+  create?: Maybe<
+    | PremiumSubscriptionCreateWithoutUserInput[]
+    | PremiumSubscriptionCreateWithoutUserInput
+  >;
+  delete?: Maybe<
+    PremiumSubscriptionWhereUniqueInput[] | PremiumSubscriptionWhereUniqueInput
+  >;
+  connect?: Maybe<
+    PremiumSubscriptionWhereUniqueInput[] | PremiumSubscriptionWhereUniqueInput
+  >;
+  set?: Maybe<
+    PremiumSubscriptionWhereUniqueInput[] | PremiumSubscriptionWhereUniqueInput
+  >;
+  disconnect?: Maybe<
+    PremiumSubscriptionWhereUniqueInput[] | PremiumSubscriptionWhereUniqueInput
+  >;
+  update?: Maybe<
+    | PremiumSubscriptionUpdateWithWhereUniqueWithoutUserInput[]
+    | PremiumSubscriptionUpdateWithWhereUniqueWithoutUserInput
+  >;
+  upsert?: Maybe<
+    | PremiumSubscriptionUpsertWithWhereUniqueWithoutUserInput[]
+    | PremiumSubscriptionUpsertWithWhereUniqueWithoutUserInput
+  >;
+  deleteMany?: Maybe<
+    PremiumSubscriptionScalarWhereInput[] | PremiumSubscriptionScalarWhereInput
+  >;
+  updateMany?: Maybe<
+    | PremiumSubscriptionUpdateManyWithWhereNestedInput[]
+    | PremiumSubscriptionUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface PremiumSubscriptionUpdateWithWhereUniqueWithoutUserInput {
+  where: PremiumSubscriptionWhereUniqueInput;
+  data: PremiumSubscriptionUpdateWithoutUserDataInput;
+}
+
+export interface PremiumSubscriptionUpdateWithoutUserDataInput {
+  from?: Maybe<DateTimeInput>;
+  to?: Maybe<DateTimeInput>;
+  freeTrialActive?: Maybe<Boolean>;
+}
+
+export interface PremiumSubscriptionUpsertWithWhereUniqueWithoutUserInput {
+  where: PremiumSubscriptionWhereUniqueInput;
+  update: PremiumSubscriptionUpdateWithoutUserDataInput;
+  create: PremiumSubscriptionCreateWithoutUserInput;
+}
+
+export interface PremiumSubscriptionScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  from?: Maybe<DateTimeInput>;
+  from_not?: Maybe<DateTimeInput>;
+  from_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  from_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  from_lt?: Maybe<DateTimeInput>;
+  from_lte?: Maybe<DateTimeInput>;
+  from_gt?: Maybe<DateTimeInput>;
+  from_gte?: Maybe<DateTimeInput>;
+  to?: Maybe<DateTimeInput>;
+  to_not?: Maybe<DateTimeInput>;
+  to_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  to_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  to_lt?: Maybe<DateTimeInput>;
+  to_lte?: Maybe<DateTimeInput>;
+  to_gt?: Maybe<DateTimeInput>;
+  to_gte?: Maybe<DateTimeInput>;
+  freeTrialActive?: Maybe<Boolean>;
+  freeTrialActive_not?: Maybe<Boolean>;
+  createdAt?: Maybe<DateTimeInput>;
+  createdAt_not?: Maybe<DateTimeInput>;
+  createdAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  createdAt_lt?: Maybe<DateTimeInput>;
+  createdAt_lte?: Maybe<DateTimeInput>;
+  createdAt_gt?: Maybe<DateTimeInput>;
+  createdAt_gte?: Maybe<DateTimeInput>;
+  updatedAt?: Maybe<DateTimeInput>;
+  updatedAt_not?: Maybe<DateTimeInput>;
+  updatedAt_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_not_in?: Maybe<DateTimeInput[] | DateTimeInput>;
+  updatedAt_lt?: Maybe<DateTimeInput>;
+  updatedAt_lte?: Maybe<DateTimeInput>;
+  updatedAt_gt?: Maybe<DateTimeInput>;
+  updatedAt_gte?: Maybe<DateTimeInput>;
+  AND?: Maybe<
+    PremiumSubscriptionScalarWhereInput[] | PremiumSubscriptionScalarWhereInput
+  >;
+  OR?: Maybe<
+    PremiumSubscriptionScalarWhereInput[] | PremiumSubscriptionScalarWhereInput
+  >;
+  NOT?: Maybe<
+    PremiumSubscriptionScalarWhereInput[] | PremiumSubscriptionScalarWhereInput
+  >;
+}
+
+export interface PremiumSubscriptionUpdateManyWithWhereNestedInput {
+  where: PremiumSubscriptionScalarWhereInput;
+  data: PremiumSubscriptionUpdateManyDataInput;
+}
+
+export interface PremiumSubscriptionUpdateManyDataInput {
+  from?: Maybe<DateTimeInput>;
+  to?: Maybe<DateTimeInput>;
+  freeTrialActive?: Maybe<Boolean>;
 }
 
 export interface UserUpsertWithoutPostInput {
@@ -1060,11 +1405,26 @@ export interface PostUpdateManyMutationInput {
   active?: Maybe<Boolean>;
 }
 
-export interface UserCreateInput {
+export interface PremiumSubscriptionCreateInput {
+  id?: Maybe<ID_Input>;
+  from: DateTimeInput;
+  to: DateTimeInput;
+  user: UserCreateOneWithoutSubscriptionInput;
+  freeTrialActive: Boolean;
+}
+
+export interface UserCreateOneWithoutSubscriptionInput {
+  create?: Maybe<UserCreateWithoutSubscriptionInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserCreateWithoutSubscriptionInput {
   id?: Maybe<ID_Input>;
   email: String;
   password: String;
   post?: Maybe<PostCreateManyWithoutAuthorInput>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
 }
 
 export interface PostCreateManyWithoutAuthorInput {
@@ -1079,10 +1439,26 @@ export interface PostCreateWithoutAuthorInput {
   active?: Maybe<Boolean>;
 }
 
-export interface UserUpdateInput {
+export interface PremiumSubscriptionUpdateInput {
+  from?: Maybe<DateTimeInput>;
+  to?: Maybe<DateTimeInput>;
+  user?: Maybe<UserUpdateOneRequiredWithoutSubscriptionInput>;
+  freeTrialActive?: Maybe<Boolean>;
+}
+
+export interface UserUpdateOneRequiredWithoutSubscriptionInput {
+  create?: Maybe<UserCreateWithoutSubscriptionInput>;
+  update?: Maybe<UserUpdateWithoutSubscriptionDataInput>;
+  upsert?: Maybe<UserUpsertWithoutSubscriptionInput>;
+  connect?: Maybe<UserWhereUniqueInput>;
+}
+
+export interface UserUpdateWithoutSubscriptionDataInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
   post?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
 }
 
 export interface PostUpdateManyWithoutAuthorInput {
@@ -1199,9 +1575,41 @@ export interface PostUpdateManyDataInput {
   active?: Maybe<Boolean>;
 }
 
+export interface UserUpsertWithoutSubscriptionInput {
+  update: UserUpdateWithoutSubscriptionDataInput;
+  create: UserCreateWithoutSubscriptionInput;
+}
+
+export interface PremiumSubscriptionUpdateManyMutationInput {
+  from?: Maybe<DateTimeInput>;
+  to?: Maybe<DateTimeInput>;
+  freeTrialActive?: Maybe<Boolean>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  email: String;
+  password: String;
+  post?: Maybe<PostCreateManyWithoutAuthorInput>;
+  subscription?: Maybe<PremiumSubscriptionCreateManyWithoutUserInput>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
+}
+
+export interface UserUpdateInput {
+  email?: Maybe<String>;
+  password?: Maybe<String>;
+  post?: Maybe<PostUpdateManyWithoutAuthorInput>;
+  subscription?: Maybe<PremiumSubscriptionUpdateManyWithoutUserInput>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
+}
+
 export interface UserUpdateManyMutationInput {
   email?: Maybe<String>;
   password?: Maybe<String>;
+  admin?: Maybe<Boolean>;
+  special?: Maybe<Boolean>;
 }
 
 export interface ArticleSubscriptionWhereInput {
@@ -1263,6 +1671,26 @@ export interface PostSubscriptionWhereInput {
   NOT?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
 }
 
+export interface PremiumSubscriptionSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<PremiumSubscriptionWhereInput>;
+  AND?: Maybe<
+    | PremiumSubscriptionSubscriptionWhereInput[]
+    | PremiumSubscriptionSubscriptionWhereInput
+  >;
+  OR?: Maybe<
+    | PremiumSubscriptionSubscriptionWhereInput[]
+    | PremiumSubscriptionSubscriptionWhereInput
+  >;
+  NOT?: Maybe<
+    | PremiumSubscriptionSubscriptionWhereInput[]
+    | PremiumSubscriptionSubscriptionWhereInput
+  >;
+}
+
 export interface UserSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
@@ -1282,7 +1710,9 @@ export interface Article {
   id: ID_Output;
   title: String;
   img?: String;
+  deleted: Boolean;
   active: Boolean;
+  advanced: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1300,7 +1730,9 @@ export interface ArticlePromise extends Promise<Article>, Fragmentable {
     last?: Int;
   }) => T;
   img: () => Promise<String>;
+  deleted: () => Promise<Boolean>;
   active: () => Promise<Boolean>;
+  advanced: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   section: <T = ArticleSectionPromise>() => T;
@@ -1321,7 +1753,9 @@ export interface ArticleSubscription
     last?: Int;
   }) => T;
   img: () => Promise<AsyncIterator<String>>;
+  deleted: () => Promise<AsyncIterator<Boolean>>;
   active: () => Promise<AsyncIterator<Boolean>>;
+  advanced: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   section: <T = ArticleSectionSubscription>() => T;
@@ -1342,7 +1776,9 @@ export interface ArticleNullablePromise
     last?: Int;
   }) => T;
   img: () => Promise<String>;
+  deleted: () => Promise<Boolean>;
   active: () => Promise<Boolean>;
+  advanced: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
   section: <T = ArticleSectionPromise>() => T;
@@ -1351,6 +1787,7 @@ export interface ArticleNullablePromise
 export interface Paragraph {
   id: ID_Output;
   body: String;
+  deleted: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1359,6 +1796,7 @@ export interface ParagraphPromise extends Promise<Paragraph>, Fragmentable {
   id: () => Promise<ID_Output>;
   body: () => Promise<String>;
   article: <T = ArticlePromise>() => T;
+  deleted: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1369,6 +1807,7 @@ export interface ParagraphSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   body: () => Promise<AsyncIterator<String>>;
   article: <T = ArticleSubscription>() => T;
+  deleted: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1379,6 +1818,7 @@ export interface ParagraphNullablePromise
   id: () => Promise<ID_Output>;
   body: () => Promise<String>;
   article: <T = ArticlePromise>() => T;
+  deleted: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1386,6 +1826,9 @@ export interface ParagraphNullablePromise
 export interface ArticleSection {
   id: ID_Output;
   title: String;
+  deleted: Boolean;
+  active: Boolean;
+  advanced: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1404,6 +1847,9 @@ export interface ArticleSectionPromise
     first?: Int;
     last?: Int;
   }) => T;
+  deleted: () => Promise<Boolean>;
+  active: () => Promise<Boolean>;
+  advanced: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1422,6 +1868,9 @@ export interface ArticleSectionSubscription
     first?: Int;
     last?: Int;
   }) => T;
+  deleted: () => Promise<AsyncIterator<Boolean>>;
+  active: () => Promise<AsyncIterator<Boolean>>;
+  advanced: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1440,6 +1889,9 @@ export interface ArticleSectionNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  deleted: () => Promise<Boolean>;
+  active: () => Promise<Boolean>;
+  advanced: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1680,6 +2132,8 @@ export interface User {
   id: ID_Output;
   email: String;
   password: String;
+  admin: Boolean;
+  special: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1697,6 +2151,17 @@ export interface UserPromise extends Promise<User>, Fragmentable {
     first?: Int;
     last?: Int;
   }) => T;
+  subscription: <T = FragmentableArray<PremiumSubscription>>(args?: {
+    where?: PremiumSubscriptionWhereInput;
+    orderBy?: PremiumSubscriptionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  admin: () => Promise<Boolean>;
+  special: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1716,6 +2181,19 @@ export interface UserSubscription
     first?: Int;
     last?: Int;
   }) => T;
+  subscription: <
+    T = Promise<AsyncIterator<PremiumSubscriptionSubscription>>
+  >(args?: {
+    where?: PremiumSubscriptionWhereInput;
+    orderBy?: PremiumSubscriptionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  admin: () => Promise<AsyncIterator<Boolean>>;
+  special: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1735,6 +2213,62 @@ export interface UserNullablePromise
     first?: Int;
     last?: Int;
   }) => T;
+  subscription: <T = FragmentableArray<PremiumSubscription>>(args?: {
+    where?: PremiumSubscriptionWhereInput;
+    orderBy?: PremiumSubscriptionOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+  admin: () => Promise<Boolean>;
+  special: () => Promise<Boolean>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PremiumSubscription {
+  id: ID_Output;
+  from: DateTimeOutput;
+  to: DateTimeOutput;
+  freeTrialActive: Boolean;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface PremiumSubscriptionPromise
+  extends Promise<PremiumSubscription>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  from: () => Promise<DateTimeOutput>;
+  to: () => Promise<DateTimeOutput>;
+  user: <T = UserPromise>() => T;
+  freeTrialActive: () => Promise<Boolean>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PremiumSubscriptionSubscription
+  extends Promise<AsyncIterator<PremiumSubscription>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  from: () => Promise<AsyncIterator<DateTimeOutput>>;
+  to: () => Promise<AsyncIterator<DateTimeOutput>>;
+  user: <T = UserSubscription>() => T;
+  freeTrialActive: () => Promise<AsyncIterator<Boolean>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
+export interface PremiumSubscriptionNullablePromise
+  extends Promise<PremiumSubscription | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  from: () => Promise<DateTimeOutput>;
+  to: () => Promise<DateTimeOutput>;
+  user: <T = UserPromise>() => T;
+  freeTrialActive: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1789,6 +2323,64 @@ export interface AggregatePostPromise
 
 export interface AggregatePostSubscription
   extends Promise<AsyncIterator<AggregatePost>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface PremiumSubscriptionConnection {
+  pageInfo: PageInfo;
+  edges: PremiumSubscriptionEdge[];
+}
+
+export interface PremiumSubscriptionConnectionPromise
+  extends Promise<PremiumSubscriptionConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<PremiumSubscriptionEdge>>() => T;
+  aggregate: <T = AggregatePremiumSubscriptionPromise>() => T;
+}
+
+export interface PremiumSubscriptionConnectionSubscription
+  extends Promise<AsyncIterator<PremiumSubscriptionConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <
+    T = Promise<AsyncIterator<PremiumSubscriptionEdgeSubscription>>
+  >() => T;
+  aggregate: <T = AggregatePremiumSubscriptionSubscription>() => T;
+}
+
+export interface PremiumSubscriptionEdge {
+  node: PremiumSubscription;
+  cursor: String;
+}
+
+export interface PremiumSubscriptionEdgePromise
+  extends Promise<PremiumSubscriptionEdge>,
+    Fragmentable {
+  node: <T = PremiumSubscriptionPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface PremiumSubscriptionEdgeSubscription
+  extends Promise<AsyncIterator<PremiumSubscriptionEdge>>,
+    Fragmentable {
+  node: <T = PremiumSubscriptionSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregatePremiumSubscription {
+  count: Int;
+}
+
+export interface AggregatePremiumSubscriptionPromise
+  extends Promise<AggregatePremiumSubscription>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregatePremiumSubscriptionSubscription
+  extends Promise<AsyncIterator<AggregatePremiumSubscription>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
 }
@@ -1892,7 +2484,9 @@ export interface ArticlePreviousValues {
   id: ID_Output;
   title: String;
   img?: String;
+  deleted: Boolean;
   active: Boolean;
+  advanced: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1903,7 +2497,9 @@ export interface ArticlePreviousValuesPromise
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
   img: () => Promise<String>;
+  deleted: () => Promise<Boolean>;
   active: () => Promise<Boolean>;
+  advanced: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1914,7 +2510,9 @@ export interface ArticlePreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
   img: () => Promise<AsyncIterator<String>>;
+  deleted: () => Promise<AsyncIterator<Boolean>>;
   active: () => Promise<AsyncIterator<Boolean>>;
+  advanced: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1947,6 +2545,9 @@ export interface ArticleSectionSubscriptionPayloadSubscription
 export interface ArticleSectionPreviousValues {
   id: ID_Output;
   title: String;
+  deleted: Boolean;
+  active: Boolean;
+  advanced: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -1956,6 +2557,9 @@ export interface ArticleSectionPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   title: () => Promise<String>;
+  deleted: () => Promise<Boolean>;
+  active: () => Promise<Boolean>;
+  advanced: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -1965,6 +2569,9 @@ export interface ArticleSectionPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   title: () => Promise<AsyncIterator<String>>;
+  deleted: () => Promise<AsyncIterator<Boolean>>;
+  active: () => Promise<AsyncIterator<Boolean>>;
+  advanced: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -1997,6 +2604,7 @@ export interface ParagraphSubscriptionPayloadSubscription
 export interface ParagraphPreviousValues {
   id: ID_Output;
   body: String;
+  deleted: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2006,6 +2614,7 @@ export interface ParagraphPreviousValuesPromise
     Fragmentable {
   id: () => Promise<ID_Output>;
   body: () => Promise<String>;
+  deleted: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2015,6 +2624,7 @@ export interface ParagraphPreviousValuesSubscription
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   body: () => Promise<AsyncIterator<String>>;
+  deleted: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2075,6 +2685,62 @@ export interface PostPreviousValuesSubscription
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
 
+export interface PremiumSubscriptionSubscriptionPayload {
+  mutation: MutationType;
+  node: PremiumSubscription;
+  updatedFields: String[];
+  previousValues: PremiumSubscriptionPreviousValues;
+}
+
+export interface PremiumSubscriptionSubscriptionPayloadPromise
+  extends Promise<PremiumSubscriptionSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = PremiumSubscriptionPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = PremiumSubscriptionPreviousValuesPromise>() => T;
+}
+
+export interface PremiumSubscriptionSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<PremiumSubscriptionSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = PremiumSubscriptionSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = PremiumSubscriptionPreviousValuesSubscription>() => T;
+}
+
+export interface PremiumSubscriptionPreviousValues {
+  id: ID_Output;
+  from: DateTimeOutput;
+  to: DateTimeOutput;
+  freeTrialActive: Boolean;
+  createdAt: DateTimeOutput;
+  updatedAt: DateTimeOutput;
+}
+
+export interface PremiumSubscriptionPreviousValuesPromise
+  extends Promise<PremiumSubscriptionPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  from: () => Promise<DateTimeOutput>;
+  to: () => Promise<DateTimeOutput>;
+  freeTrialActive: () => Promise<Boolean>;
+  createdAt: () => Promise<DateTimeOutput>;
+  updatedAt: () => Promise<DateTimeOutput>;
+}
+
+export interface PremiumSubscriptionPreviousValuesSubscription
+  extends Promise<AsyncIterator<PremiumSubscriptionPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  from: () => Promise<AsyncIterator<DateTimeOutput>>;
+  to: () => Promise<AsyncIterator<DateTimeOutput>>;
+  freeTrialActive: () => Promise<AsyncIterator<Boolean>>;
+  createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+  updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
+}
+
 export interface UserSubscriptionPayload {
   mutation: MutationType;
   node: User;
@@ -2104,6 +2770,8 @@ export interface UserPreviousValues {
   id: ID_Output;
   email: String;
   password: String;
+  admin: Boolean;
+  special: Boolean;
   createdAt: DateTimeOutput;
   updatedAt: DateTimeOutput;
 }
@@ -2114,6 +2782,8 @@ export interface UserPreviousValuesPromise
   id: () => Promise<ID_Output>;
   email: () => Promise<String>;
   password: () => Promise<String>;
+  admin: () => Promise<Boolean>;
+  special: () => Promise<Boolean>;
   createdAt: () => Promise<DateTimeOutput>;
   updatedAt: () => Promise<DateTimeOutput>;
 }
@@ -2124,6 +2794,8 @@ export interface UserPreviousValuesSubscription
   id: () => Promise<AsyncIterator<ID_Output>>;
   email: () => Promise<AsyncIterator<String>>;
   password: () => Promise<AsyncIterator<String>>;
+  admin: () => Promise<AsyncIterator<Boolean>>;
+  special: () => Promise<AsyncIterator<Boolean>>;
   createdAt: () => Promise<AsyncIterator<DateTimeOutput>>;
   updatedAt: () => Promise<AsyncIterator<DateTimeOutput>>;
 }
@@ -2168,6 +2840,10 @@ export type Long = string;
 export const models: Model[] = [
   {
     name: "User",
+    embedded: false
+  },
+  {
+    name: "PremiumSubscription",
     embedded: false
   },
   {

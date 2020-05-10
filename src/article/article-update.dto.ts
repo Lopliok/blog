@@ -4,7 +4,7 @@ import { ArticleUpdateInput } from '../graphql.schema.generated';
 export class ArticleUpdateInputDto extends ArticleUpdateInput {
   @IsOptional()
   @IsString()
-  @MinLength(10)
+  @MinLength(6)
   @MaxLength(60)
   readonly title?: string;
 }

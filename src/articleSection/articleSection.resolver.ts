@@ -18,7 +18,7 @@ import { ArticleSectionUpdateDto } from './articleSection-update.dto';
 
 @Resolver('ArticleSection')
 export class ArticleSectionResolver {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   @Query()
   @UseGuards(GqlAuthGuard)
@@ -46,13 +46,15 @@ export class ArticleSectionResolver {
   @UseGuards(GqlAuthGuard)
   async updateArticleSection(
     @Args('articleSectionUpdateInput')
-    { title, articles, id }: ArticleSectionUpdateDto,
+    { title, articles, id, active, deleted, }: ArticleSectionUpdateDto,
     @GqlUser() user: User,
   ) {
     return this.prisma.client.updateArticleSection({
       data: {
         title,
-        articles: { connect: articles.map(it => ({ id: it.id })) },
+        active,
+        deleted,
+        articles: { connect: (articles || []).map(it => ({ id: it.id })) },
       },
       where: { id },
     });

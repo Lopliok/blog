@@ -3,6 +3,19 @@ type User {
     email: String! @unique
     password: String!
     post: [Post!]!
+    subscription: [PremiumSubscription!]!
+    admin: Boolean! @default(value: false)
+    special: Boolean! @default(value: false)
+    createdAt: DateTime! @createdAt
+    updatedAt: DateTime! @updatedAt
+}
+
+type PremiumSubscription {
+    id: ID! @id
+    from: DateTime!
+    to: DateTime!
+    user: User!
+    freeTrialActive: Boolean!
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
 }
@@ -22,6 +35,9 @@ type ArticleSection {
     id: ID! @id
     title: String!
     articles: [Article]!
+    deleted: Boolean! @default(value: false)
+    active: Boolean! @default(value: false)
+    advanced: Boolean! @default(value: true)
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
 }
@@ -33,7 +49,9 @@ type Article {
     title: String!
     paragraphs: [Paragraph!]!
     img: String
+    deleted: Boolean! @default(value: false)
     active: Boolean! @default(value: true)
+    advanced: Boolean! @default(value: true)
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
     section: ArticleSection
@@ -43,6 +61,7 @@ type Paragraph {
     id: ID! @id
     body: String!
     article: Article!
+    deleted: Boolean! @default(value: false)
     createdAt: DateTime! @createdAt
     updatedAt: DateTime! @updatedAt
 }

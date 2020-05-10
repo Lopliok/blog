@@ -3,7 +3,7 @@ import { PostInput } from '../graphql.schema.generated';
 
 export class PostInputDto extends PostInput {
   @IsString()
-  @MinLength(10)
+  @MinLength(6)
   @MaxLength(60)
   readonly title: string;
 }

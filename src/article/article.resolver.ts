@@ -17,7 +17,7 @@ import { Post, Article } from '../graphql.schema.generated';
 
 @Resolver('Article')
 export class ArticleResolver {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   @Query()
   async article(@Args('id') id: string) {
@@ -47,12 +47,24 @@ export class ArticleResolver {
   @Mutation()
   @UseGuards(GqlAuthGuard)
   async createArticle(
-    @Args('articleInput') { title, paragraphs, active }: ArticleInputDto,
+    @Args('articleInput') { title, paragraphs, active, section }: ArticleInputDto,
     @GqlUser() user: User,
   ) {
+
+    console.log(section)
+
+    let additional: any = {}
+
+    if (section) {
+      additional.section = {
+        connect: { id: section }
+      }
+    }
+
     return this.prisma.client.createArticle({
       title,
       paragraphs: { create: paragraphs.map(e => ({ body: e })) },
+      ...additional,
       active,
     });
   }
@@ -61,18 +73,22 @@ export class ArticleResolver {
   @UseGuards(GqlAuthGuard)
   async updateArticle(
     @Args('articleUpdateInput')
-    { title, paragraphs, active, img, id }: ArticleUpdateInputDto,
+    { title, paragraphs, newParagraphs, active, img, id, advanced, deleted }: ArticleUpdateInputDto,
     @GqlUser() user: User,
   ) {
+
     return this.prisma.client.updateArticle({
       data: {
         img,
         active,
         title,
+        deleted,
+        advanced,
         paragraphs: {
-          updateMany: paragraphs.map(it => ({
+          create: (newParagraphs || []).map(it => ({ body: it })),
+          updateMany: (paragraphs || []).map(it => ({
             where: { id: it.id },
-            data: { body: it.body },
+            data: { body: it.body, deleted: it.deleted },
           })),
         },
       },
