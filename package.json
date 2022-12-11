@@ -30,7 +30,7 @@
     "@nestjs/graphql": "^6.4.3",
     "@nestjs/jwt": "^6.1.1",
     "@nestjs/passport": "^6.1.0",
-    "@nestjs/platform-express": "^6.0.0",
+    "@nestjs/platform-express": "^9.2.1",
     "@nodelib/fs.stat": "^2.0.3",
     "@types/cors": "^2.8.6",
     "apollo-server-express": "^2.9.2",
