@@ -6,17 +6,15 @@ import {
   ResolveProperty,
   Resolver,
 } from '@nestjs/graphql';
-import { PrismaService } from '../prisma/prisma.service';
 import { Post } from '../graphql.schema.generated';
 import { GqlUser } from '../shared/decorators/decorators';
-import { User } from '../../generated/prisma-client';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { PostInputDto } from './post-input.dto';
 
 @Resolver('Post')
 export class PostResolver {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: any) {}
 
   @Query()
   async post(@Args('id') id: string) {
@@ -31,7 +29,7 @@ export class PostResolver {
 
   @Query()
   @UseGuards(GqlAuthGuard)
-  async myPosts(@GqlUser() user: User) {
+  async myPosts(@GqlUser() user: any) {
     return this.prisma.client.posts({ where: { author: user } });
   }
 
@@ -44,7 +42,7 @@ export class PostResolver {
   @UseGuards(GqlAuthGuard)
   async createPost(
     @Args('postInput') { title, body, active }: PostInputDto,
-    @GqlUser() user: User,
+    @GqlUser() user: any,
   ) {
     console.log('test');
     return this.prisma.client.createPost({

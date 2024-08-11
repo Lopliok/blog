@@ -5,5 +5,5 @@ export class ArticleInputDto extends ArticleInput {
   @IsString()
   @MinLength(6)
   @MaxLength(60)
-  readonly title: string;
+  declare readonly title: string;
 }

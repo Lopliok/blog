@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+/* import { Injectable } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma-client';
 
 @Injectable()
@@ -9,3 +9,4 @@ export class PrismaService {
     this.client = new Prisma();
   }
 }
+ */

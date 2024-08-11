@@ -4,14 +4,13 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { LoginInput } from '../graphql.schema.generated';
 import { ResGql } from '../shared/decorators/decorators';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
 import { SignUpInputDto } from './sign-up-input.dto';
 
 @Resolver('Auth')
 export class AuthResolver {
   constructor(
     private readonly jwt: JwtService,
-    private readonly prisma: PrismaService,
+    private readonly prisma: any,
   ) {}
 
   @Mutation()

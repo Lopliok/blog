@@ -4,10 +4,12 @@ import { Strategy } from 'passport-jwt';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 
-const cookieExtractor = (req: Request): string | null => {
+const cookieExtractor = (req: Request<any>): string | null => {
   let token = null;
-  if (req && req.cookies) {
-    token = req.cookies.token || req.headers['cookie-value'];
+  // @ts-ignore
+  if (req && req?.cookies) {
+    // @ts-ignore
+    token = req?.cookies?.token || req?.headers?.['cookie-value'];
   }
   //console.log(token, req.headers);
   return token;
@@ -22,7 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload) {
+  validate(payload: any) {
     return this.authService.validate(payload);
   }
 }

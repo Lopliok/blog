@@ -1,6 +1,5 @@
 import { IsString, MaxLength, MinLength, IsOptional } from 'class-validator';
 import {
-  ArticleUpdateInput,
   ArticleSectionUpdateInput,
 } from '../graphql.schema.generated';
 
@@ -9,5 +8,5 @@ export class ArticleSectionUpdateDto extends ArticleSectionUpdateInput {
   @IsString()
   @MinLength(6)
   @MaxLength(60)
-  readonly title?: string;
+  declare readonly title?: string;
 }

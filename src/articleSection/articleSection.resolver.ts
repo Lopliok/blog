@@ -7,9 +7,7 @@ import {
   ResolveProperty,
   Parent,
 } from '@nestjs/graphql';
-import { User } from '../../generated/prisma-client';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
-import { PrismaService } from '../prisma/prisma.service';
 import { GqlUser } from '../shared/decorators/decorators';
 import { ArticleSectionInputDto } from './articleSection-input.dto';
 import { Post, Article } from '../graphql.schema.generated';
@@ -18,7 +16,7 @@ import { ArticleSectionUpdateDto } from './articleSection-update.dto';
 
 @Resolver('ArticleSection')
 export class ArticleSectionResolver {
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: any) { }
 
   @Query()
   @UseGuards(GqlAuthGuard)
@@ -35,7 +33,7 @@ export class ArticleSectionResolver {
   @UseGuards(GqlAuthGuard)
   async createArticleSection(
     @Args('articleSectionInput') { title }: ArticleSectionInputDto,
-    @GqlUser() user: User,
+    @GqlUser() user: any,
   ) {
     return this.prisma.client.createArticleSection({
       title,
@@ -47,7 +45,7 @@ export class ArticleSectionResolver {
   async updateArticleSection(
     @Args('articleSectionUpdateInput')
     { title, articles, id, active, deleted, }: ArticleSectionUpdateDto,
-    @GqlUser() user: User,
+    @GqlUser() user: any,
   ) {
     return this.prisma.client.updateArticleSection({
       data: {
