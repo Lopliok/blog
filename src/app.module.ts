@@ -8,14 +8,20 @@ import { UserModule } from './user/user.module';
 import { ArticleModule } from './article/article.module';
 import { ArticleSectionModule } from './articleSection/articleSection.module';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { databaseProviders } from './database/database.providers';
+import { DevtoolsModule } from "@nestjs/devtools-integration";
 
 
 @Module({
   imports: [
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production',
+    }),
     GraphQLModule.forRootAsync({
       driver: ApolloDriver,
       useClass: GraphqlOptions,
     }),
+
     AuthModule,
     PostModule,
     ArticleModule,
@@ -23,6 +29,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
     UserModule,
   ],
   providers: [
+    ...databaseProviders,
     {
       provide: APP_PIPE,
       useClass: ValidationPipe,

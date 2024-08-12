@@ -1,18 +1,12 @@
 
-/** ------------------------------------------------------
+/*
+ * -------------------------------------------------------
  * THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
  * -------------------------------------------------------
  */
 
 /* tslint:disable */
-export class ArticleInput {
-    title: string;
-    paragraphs: string[];
-    active?: boolean;
-    section?: string;
-    advanced?: boolean;
-    img?: string;
-}
+/* eslint-disable */
 
 export class ArticleSectionInput {
     title: string;
@@ -20,22 +14,16 @@ export class ArticleSectionInput {
 
 export class ArticleSectionUpdateInput {
     id: string;
-    title?: string;
-    active?: boolean;
-    advanced?: boolean;
-    deleted?: boolean;
-    articles?: ArticleUpdateInput[];
+    title?: Nullable<string>;
+    active?: Nullable<boolean>;
+    advanced?: Nullable<boolean>;
+    deleted?: Nullable<boolean>;
+    articles?: Nullable<Nullable<ArticleUpdateInput>[]>;
 }
 
-export class ArticleUpdateInput {
-    id: string;
-    title?: string;
-    paragraphs?: ParagraphUpdateInput[];
-    newParagraphs?: string[];
-    advanced?: boolean;
-    deleted?: boolean;
-    active?: boolean;
-    img?: string;
+export class SignUpInput {
+    email: string;
+    password: string;
 }
 
 export class LoginInput {
@@ -43,21 +31,52 @@ export class LoginInput {
     password: string;
 }
 
-export class ParagraphUpdateInput {
-    id: string;
-    deleted?: boolean;
-    body?: string;
-}
-
 export class PostInput {
     title: string;
-    body?: string;
-    active?: boolean;
+    body?: Nullable<string>;
+    active?: Nullable<boolean>;
 }
 
-export class SignUpInput {
+export class ParagraphUpdateInput {
+    id: string;
+    deleted?: Nullable<boolean>;
+    body?: Nullable<string>;
+}
+
+export class ArticleInput {
+    title: string;
+    paragraphs: string[];
+    active?: Nullable<boolean>;
+    section?: Nullable<string>;
+    advanced?: Nullable<boolean>;
+    img?: Nullable<string>;
+}
+
+export class ArticleUpdateInput {
+    id: string;
+    title?: Nullable<string>;
+    paragraphs?: Nullable<ParagraphUpdateInput[]>;
+    newParagraphs?: Nullable<string[]>;
+    advanced?: Nullable<boolean>;
+    deleted?: Nullable<boolean>;
+    active?: Nullable<boolean>;
+    img?: Nullable<string>;
+}
+
+export class User {
+    id: string;
     email: string;
-    password: string;
+    post: Post[];
+    createdAt: string;
+    updatedAt: string;
+}
+
+export class Post {
+    id: string;
+    title: string;
+    body?: Nullable<string>;
+    author: User;
+    active: boolean;
 }
 
 export class Article {
@@ -67,8 +86,8 @@ export class Article {
     active: boolean;
     advanced: boolean;
     deleted: boolean;
-    img?: string;
-    section?: ArticleSection;
+    img?: Nullable<string>;
+    section?: Nullable<ArticleSection>;
 }
 
 export class ArticleSection {
@@ -77,28 +96,7 @@ export class ArticleSection {
     active: boolean;
     advanced: boolean;
     deleted: boolean;
-    articles: Article[];
-}
-
-export class AuthPayload {
-    id: string;
-    email: string;
-}
-
-export abstract class IMutation {
-    abstract signup(signUpInput?: SignUpInput): AuthPayload | Promise<AuthPayload>;
-
-    abstract login(loginInput?: LoginInput): AuthPayload | Promise<AuthPayload>;
-
-    abstract createPost(postInput?: PostInput): Post | Promise<Post>;
-
-    abstract createArticle(articleInput?: ArticleInput): Article | Promise<Article>;
-
-    abstract updateArticle(articleUpdateInput?: ArticleUpdateInput): Article | Promise<Article>;
-
-    abstract createArticleSection(articleSectionInput?: ArticleSectionInput): ArticleSection | Promise<ArticleSection>;
-
-    abstract updateArticleSection(articleSectionUpdateInput?: ArticleSectionUpdateInput): ArticleSection | Promise<ArticleSection>;
+    articles: Nullable<Article>[];
 }
 
 export class Paragraph {
@@ -108,12 +106,9 @@ export class Paragraph {
     article: Article;
 }
 
-export class Post {
+export class AuthPayload {
     id: string;
-    title: string;
-    body?: string;
-    author: User;
-    active: boolean;
+    email: string;
 }
 
 export abstract class IQuery {
@@ -127,13 +122,23 @@ export abstract class IQuery {
 
     abstract articleSections(): ArticleSection[] | Promise<ArticleSection[]>;
 
-    abstract article(id: string): Article | Promise<Article>;
+    abstract article(id: string): Nullable<Article> | Promise<Nullable<Article>>;
 }
 
-export class User {
-    id: string;
-    email: string;
-    post: Post[];
-    createdAt: string;
-    updatedAt: string;
+export abstract class IMutation {
+    abstract signup(signUpInput?: Nullable<SignUpInput>): AuthPayload | Promise<AuthPayload>;
+
+    abstract login(loginInput?: Nullable<LoginInput>): AuthPayload | Promise<AuthPayload>;
+
+    abstract createPost(postInput?: Nullable<PostInput>): Post | Promise<Post>;
+
+    abstract createArticle(articleInput?: Nullable<ArticleInput>): Article | Promise<Article>;
+
+    abstract updateArticle(articleUpdateInput?: Nullable<ArticleUpdateInput>): Article | Promise<Article>;
+
+    abstract createArticleSection(articleSectionInput?: Nullable<ArticleSectionInput>): ArticleSection | Promise<ArticleSection>;
+
+    abstract updateArticleSection(articleSectionUpdateInput?: Nullable<ArticleSectionUpdateInput>): ArticleSection | Promise<ArticleSection>;
 }
+
+type Nullable<T> = T | null;

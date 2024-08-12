@@ -6,6 +6,7 @@ import {
   Resolver,
   ResolveProperty,
   Parent,
+  ResolveField,
 } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { GqlUser } from '../shared/decorators/decorators';
@@ -24,7 +25,7 @@ export class ArticleSectionResolver {
     return this.prisma.client.articleSections();
   }
 
-  @ResolveProperty()
+  @ResolveField()
   async articles(@Parent() { id }: Article) {
     return this.prisma.client.articles({ where: { section: { id } } });
   }

@@ -3,7 +3,7 @@ import { UserResolver } from './user.resolver';
 //import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
-  providers: [UserResolver],
+  providers: [],
   imports: [],
 })
 export class UserModule {}

@@ -25,6 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: any) {
-    return this.authService.validate(payload);
+
+    return true //this.authService.validate(payload);
   }
 }

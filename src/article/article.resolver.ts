@@ -6,6 +6,7 @@ import {
   Resolver,
   ResolveProperty,
   Parent,
+  ResolveField,
 } from '@nestjs/graphql';
 import { GqlAuthGuard } from '../auth/graphql-auth.guard';
 import { GqlUser } from '../shared/decorators/decorators';
@@ -13,23 +14,23 @@ import { ArticleInputDto } from './article-input.dto';
 import { ArticleUpdateInputDto } from './article-update.dto';
 import { Post, Article } from '../graphql.schema.generated';
 
-@Resolver('Article')
+@Resolver(Article)
 export class ArticleResolver {
   constructor(private readonly prisma: any) { }
 
-  @Query()
+  @Query(returns => Article)
   async article(@Args('id') id: string) {
     return this.prisma.client.article({ id });
   }
 
-  @Query()
+  @Query(returns => Article)
   @UseGuards(GqlAuthGuard)
   async articles() {
     console.log(this.prisma.client.articles());
     return this.prisma.client.articles();
   }
 
-  @ResolveProperty()
+  @ResolveField()
   async section(@Parent() { id }: Article) {
     const data = await this.prisma.client.articleSections({
       where: { articles_some: { id } },
@@ -37,7 +38,7 @@ export class ArticleResolver {
     return data.length ? data[0] : null;
   }
 
-  @ResolveProperty()
+  @ResolveField()
   async paragraphs(@Parent() { id }: Article) {
     return this.prisma.client.paragraphs({ where: { article: { id } } });
   }

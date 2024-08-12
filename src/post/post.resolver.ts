@@ -5,6 +5,7 @@ import {
   Query,
   ResolveProperty,
   Resolver,
+  ResolveField,
 } from '@nestjs/graphql';
 import { Post } from '../graphql.schema.generated';
 import { GqlUser } from '../shared/decorators/decorators';
@@ -14,28 +15,28 @@ import { PostInputDto } from './post-input.dto';
 
 @Resolver('Post')
 export class PostResolver {
-  constructor(private readonly prisma: any) {}
+  constructor(private readonly database: any) {}
 
   @Query()
   async post(@Args('id') id: string) {
-    return this.prisma.client.post({ id });
+    return {} //this.prisma.client.post({ id });
   }
 
   @Query()
   @UseGuards(GqlAuthGuard)
   async posts() {
-    return this.prisma.client.posts();
+    return {} //this.prisma.client.posts();
   }
 
   @Query()
   @UseGuards(GqlAuthGuard)
   async myPosts(@GqlUser() user: any) {
-    return this.prisma.client.posts({ where: { author: user } });
+    return {}//this.prisma.client.posts({ where: { author: user } });
   }
 
-  @ResolveProperty()
+  @ResolveField()
   async author(@Parent() { id }: Post) {
-    return this.prisma.client.post({ id }).author();
+    return {} //this.prisma.client.post({ id }).author();
   }
 
   @Mutation()
@@ -44,12 +45,11 @@ export class PostResolver {
     @Args('postInput') { title, body, active }: PostInputDto,
     @GqlUser() user: any,
   ) {
-    console.log('test');
-    return this.prisma.client.createPost({
+    return {} /* this.prisma.client.createPost({
       title,
       body,
       active,
       author: { connect: { id: user.id } },
-    });
+    }); */
   }
 }

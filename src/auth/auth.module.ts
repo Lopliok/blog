@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthResolver } from './auth.resolver';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
+import { databaseProviders } from '../database/database.providers';
+import { AuthService } from './auth.service';
+import { UsersService } from './user.service';
+import { AuthResolver } from './auth.resolver';
 
 @Module({
   imports: [
@@ -17,6 +19,6 @@ import { JwtStrategy } from './jwt.strategy';
       },
     }),
   ],
-  providers: [AuthService, AuthResolver, JwtStrategy],
+  providers: [...databaseProviders, JwtStrategy, AuthService, UsersService, AuthResolver],
 })
 export class AuthModule {}
